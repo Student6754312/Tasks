@@ -11,29 +11,29 @@ namespace Labyrinth
         static void Main(string[] args)
         {
 
-            IOutputStringService outputService = null!;
+            IOutputService outputService = null!;
 
             try
             {
                 //Setup DI
                 var serviceProvider = new ServiceCollection()
-                          .AddSingleton<IInputStringService, InputStringService>()
+                          .AddSingleton<IInputService, InputService>()
                           .AddSingleton<ILabyrinthService, LabyrinthService>()
-                          .AddSingleton<IOutputStringService, OutputStringService>()
+                          .AddSingleton<IOutputService, OutputService>()
                           .BuildServiceProvider();
 
-                outputService = serviceProvider.GetService<IOutputStringService>()!;
+                outputService = serviceProvider.GetService<IOutputService>()!;
 
                 int l, r, c;
                 var labyrinths = new List<ILabyrinth>();
 
                 var labyrinthService = serviceProvider.GetService<ILabyrinthService>();
-                var inputStringService = serviceProvider.GetService<IInputStringService>();
+                var inputStringService = serviceProvider.GetService<IInputService>();
 
 
                 while (true)
                 {
-                    outputService.ConsoleOutuptLine("L R C");
+                    outputService.ConsoleOutputLine("L R C");
                     string? inputString = inputStringService!.GetStringFromUser();
 
                     var parameters = inputString!.Split(' ');
@@ -51,7 +51,7 @@ namespace Labyrinth
 
                     if (l == 0 && r == 0 && c == 0)
                     {
-                        outputService.ConsoleOutupt(Environment.NewLine);
+                        outputService.ConsoleOutput(Environment.NewLine);
                         break;
                     }
 
@@ -60,42 +60,42 @@ namespace Labyrinth
                     labyrinthService!.CreateLabyrinth(labyrinth);
 
                     labyrinths.Add(labyrinth);
-                    outputService.ConsoleOutupt(Environment.NewLine);
+                    outputService.ConsoleOutput(Environment.NewLine);
                 }
 
                 if (labyrinths.Count == 0)
                 {
-                    outputService.ConsoleOutuptLine("Exit!");
+                    outputService.ConsoleOutputLine("Exit!");
                     return;
                 }
 
-                outputService.ConsoleOutuptLine("Ausgabe:\n");
+                outputService.ConsoleOutputLine("Ausgabe:\n");
 
                 foreach (var labyrinth in labyrinths)
                 {
                     if (!labyrinthService!.BreadthFirstSearch(labyrinth, out List<IQuader> shortestPathList))
                     {
-                        outputService.ConsoleOutuptLine("Gefangen :-(\n");
+                        outputService.ConsoleOutputLine("Gefangen :-(\n");
                     }
                     else
                     {
                        var minTime = shortestPathList[1].Value;
-                       outputService.ConsoleOutuptLine($"Entkommen in {minTime} Minute(n)!)\n");
+                       outputService.ConsoleOutputLine($"Entkommen in {minTime} Minute(n)!)\n");
                     }
                 }
 
             }
             catch (FormatException ex)
             {
-                if (outputService != null) outputService.ConsoleOutuptLine($"\nInput Error: {ex.Message}");
+                if (outputService != null) outputService.ConsoleOutputLine($"\nInput Error: {ex.Message}");
             }
             catch (Exception ex)
             {
-                if (outputService != null) outputService.ConsoleOutuptLine($"\nUnexpected Error: {ex.Message}");
+                if (outputService != null) outputService.ConsoleOutputLine($"\nUnexpected Error: {ex.Message}");
             }
             finally
             {
-                if (outputService != null) outputService.ConsoleOutuptLine("\nExit!");
+                if (outputService != null) outputService.ConsoleOutputLine("\nExit!");
             }
         }
 

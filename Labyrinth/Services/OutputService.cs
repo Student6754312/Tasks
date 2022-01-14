@@ -2,14 +2,14 @@
 
 namespace Labyrinth.Services 
 {
-    public class OutputStringService :IOutputStringService
+    public class OutputService :IOutputService
     {
-        public void ConsoleOutuptLine(string str)
+        public void ConsoleOutputLine(string str)
         {
              Console.WriteLine(str);
         }
 
-        public void ConsoleOutupt(string str)
+        public void ConsoleOutput(string str)
         {
             Console.Write(str);
         }

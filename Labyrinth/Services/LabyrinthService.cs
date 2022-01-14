@@ -8,10 +8,10 @@ namespace Labyrinth.Services
 {
     public class LabyrinthService : ILabyrinthService
     {
-        private readonly IInputStringService _inputStringService;
-        private readonly IOutputStringService _outputService;
+        private readonly IInputService _inputStringService;
+        private readonly IOutputService _outputService;
 
-        public LabyrinthService(IInputStringService inputStringService, IOutputStringService iOutputService)
+        public LabyrinthService(IInputService inputStringService, IOutputService iOutputService)
         {
             _inputStringService = inputStringService;
             _outputService = iOutputService;
@@ -21,7 +21,7 @@ namespace Labyrinth.Services
         {
             for (int i = 0; i < labyrinth.L; i++)
             {
-                _outputService.ConsoleOutupt("\n");
+                _outputService.ConsoleOutput("\n");
 
                 for (int j = 0; j < labyrinth.R; j++)
                 {
@@ -135,14 +135,14 @@ namespace Labyrinth.Services
         {
             for (int i = 0; i < labyrinth.L; i++)
             {
-                _outputService.ConsoleOutupt(Environment.NewLine);
+                _outputService.ConsoleOutput(Environment.NewLine);
                 for (int j = 0; j < labyrinth.R; j++)
                 {
                     for (int k = 0; k < labyrinth.C; k++)
                     {
-                        _outputService.ConsoleOutupt(labyrinth.LabyrinthArray[i, j, k].View.ToString());
+                        _outputService.ConsoleOutput(labyrinth.LabyrinthArray[i, j, k].View.ToString());
                     }
-                    _outputService.ConsoleOutupt(Environment.NewLine);
+                    _outputService.ConsoleOutput(Environment.NewLine);
                 }
             }
         }

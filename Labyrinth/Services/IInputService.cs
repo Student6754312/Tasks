@@ -1,6 +1,6 @@
 ﻿namespace Labyrinth.Services
 {
-    public interface IInputStringService
+    public interface IInputService
     {
         string? GetStringFromUser();
     }

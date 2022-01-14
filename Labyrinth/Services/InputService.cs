@@ -2,7 +2,7 @@
 
 namespace Labyrinth.Services
 {
-    public class InputStringService : IInputStringService
+    public class InputService : IInputService
     {
         public string? GetStringFromUser()
         {
