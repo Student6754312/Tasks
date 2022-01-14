@@ -15,7 +15,7 @@ namespace Labyrinth
 
             try
             {
-                //setup our DI
+                //Setup DI
                 var serviceProvider = new ServiceCollection()
                           .AddSingleton<IInputStringService, InputStringService>()
                           .AddSingleton<ILabyrinthService, LabyrinthService>()
@@ -84,7 +84,6 @@ namespace Labyrinth
                     else
                     {
                         outputService.ConsoleOutuptLine($"Entkommen in {minTime} Minute(n)!)\n");
-                        outputService.ConsoleOutuptLine(Environment.NewLine);
                     }
                 }
 
