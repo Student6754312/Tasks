@@ -73,14 +73,14 @@ namespace Labyrinth
 
                 foreach (var labyrinth in labyrinths)
                 {
-                    if (!labyrinthService!.BreadthFirstSearch(labyrinth, out int time))
+                    if (!labyrinthService!.BreadthFirstSearch(labyrinth, out List<IQuader> shortestPathList))
                     {
                         outputService.ConsoleOutuptLine("Gefangen :-(\n");
                     }
                     else
                     {
-                        int minTime = labyrinthService.FindShortestPath(labyrinth);
-                        outputService.ConsoleOutuptLine($"Entkommen in {minTime} Minute(n)!)\n");
+                       var minTime = shortestPathList[1].Value;
+                       outputService.ConsoleOutuptLine($"Entkommen in {minTime} Minute(n)!)\n");
                     }
                 }
 

@@ -1,17 +1,14 @@
-﻿using Xunit;
-using Labyrinth.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using Labyrinth.Domain;
+using Labyrinth.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using Xunit;
 
-namespace Labyrinth.Services.Tests
+namespace Labyrinth.Test.Services
 {
     public class LabyrinthServiceTests
     {
@@ -30,7 +27,7 @@ namespace Labyrinth.Services.Tests
         }
 
         [Fact]
-        public void CreateLabyrinthTest_ThrowWrongNumberOfQuaders()
+        public void CreateLabyrinth_ThrowWrongNumberOfQuadersTest()
         {
             // Arrange
             var inputString = "S\n#.\n##\nE.";
@@ -52,7 +49,7 @@ namespace Labyrinth.Services.Tests
 
 
         [Fact]
-        public void TestCreateLabyrinth_ThrowInputStringIsNull()
+        public void CreateLabyrinth_ThrowInputStringIsNullTest()
         {
             // Arrange
             var inputString = "";
@@ -99,14 +96,14 @@ namespace Labyrinth.Services.Tests
         [InlineData(0, 0, 0)]
         [InlineData(1, 0, 1)]
         [InlineData(0, 1, 1)]
-        public void TestCreateAdjacencyList(int x, int y, int z)
+        public void CreateAdjacencyListTest(int x, int y, int z)
         {
             // Arrange
             IQuader quader = new Quader('S', new QuaderLocation(x, y, z));
 
             var labyrinthService = _serviceProvider.GetService<ILabyrinthService>();
 
-            var labyrinthArray = new IQuader[l, r, c];
+            var labyrinthArray = CreateLabyrinthArray("S.\n#.\n##\nE.");
             var mockLabyrinth = CreateILabyrinthMock(labyrinthArray);
 
             // Act
@@ -114,9 +111,9 @@ namespace Labyrinth.Services.Tests
 
             //Assert
             Assert.Equal(3, adjacencyList.Count);
-            Assert.Equal(1, adjacencyList[0].X);
-            Assert.Equal(z, adjacencyList[0].Y);
-            Assert.Equal(z, adjacencyList[0].Z);
+            Assert.Equal(1, adjacencyList[0].Location.X);
+            Assert.Equal(z, adjacencyList[0].Location.Y);
+            Assert.Equal(z, adjacencyList[0].Location.Z);
         }
 
         [Fact]
@@ -128,7 +125,7 @@ namespace Labyrinth.Services.Tests
             var mockLabyrinth = CreateILabyrinthMock(labyrinthArray);
 
             // Act
-            var result = labyrinthService.BreadthFirstSearch(mockLabyrinth.Object, out int time);
+            var result = labyrinthService.BreadthFirstSearch(mockLabyrinth.Object, out List<IQuader> shortestPathlist);
 
             //Assert
             Assert.True(result);
@@ -138,11 +135,14 @@ namespace Labyrinth.Services.Tests
             Assert.Equal(-2, labyrinthArray[1, 1, 0].Value);
             Assert.Equal(-1, labyrinthArray[1, 0, 1].Value);
             Assert.Equal(4, labyrinthArray[1, 1, 1].Value);
-
+            
+            Assert.Equal( 5, shortestPathlist.Count);
+            Assert.Equal(4, shortestPathlist[1].Value);
+            
         }
 
         [Fact]
-        public void BreadthFirstSearchTest_FalseResult()
+        public void BreadthFirstSearch_FalseResultTest()
         {
             // Arrange
             var labyrinthService = _serviceProvider.GetService<ILabyrinthService>();
@@ -150,33 +150,13 @@ namespace Labyrinth.Services.Tests
             var mockLabyrinth = CreateILabyrinthMock(labyrinthArray);
 
             // Act
-            var result = labyrinthService.BreadthFirstSearch(mockLabyrinth.Object, out int time);
+            var result = labyrinthService.BreadthFirstSearch(mockLabyrinth.Object, out List<IQuader>shortestPathlist);
 
             //Assert
             Assert.False(result);
+            
         }
-
-        [Fact]
-        public void FindShortestPathTest()
-        {
-            // Arrange
-            var labyrinthService = _serviceProvider.GetService<ILabyrinthService>();
-
-            var labyrinthArray = CreateLabyrinthArray("S.\n#.\n##\nE.");
-
-            labyrinthArray[0, 0, 1].Value = 2;
-            labyrinthArray[0, 1, 1].Value = 3;
-            labyrinthArray[1, 1, 1].Value = 4;
-
-            var mockLabyrinth = CreateILabyrinthMock(labyrinthArray);
-
-            // Act
-            var time = labyrinthService.FindShortestPath(mockLabyrinth.Object);
-
-            //Assert
-            Assert.Equal(4, time);
-        }
-
+     
         [Fact]
         public void FindQuaderTest()
         {

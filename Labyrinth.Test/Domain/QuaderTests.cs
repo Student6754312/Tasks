@@ -1,12 +1,8 @@
-﻿using Xunit;
+﻿using System;
 using Labyrinth.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Xunit;
 
-namespace Labyrinth.Domain.Tests
+namespace Labyrinth.Test.Domain
 {
     public class QuaderTests
     {
@@ -25,9 +21,9 @@ namespace Labyrinth.Domain.Tests
             var quadr = new Quader(view, location);
 
             //Assert
-            Assert.Equal(quadr.Value, value);
-            Assert.Equal(quadr.View, view);
-            Assert.Equal(quadr.Location, location);
+            Assert.Equal( value, quadr.Value);
+            Assert.Equal( view, quadr.View);
+            Assert.Equal( location, quadr.Location);
         }
         [Fact]
         public void QuaderTest_ThrowIncorrectQuaderSymbol()

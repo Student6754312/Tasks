@@ -6,7 +6,7 @@ namespace Labyrinth.Services
     {
         public string? GetStringFromUser()
         {
-            return Console.ReadLine();
+            return Console.ReadLine()?.Trim();
         }
     }
 }

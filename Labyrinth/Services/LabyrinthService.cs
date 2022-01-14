@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Labyrinth.Domain;
 
 namespace Labyrinth.Services
 {
     public class LabyrinthService : ILabyrinthService
     {
-        private IInputStringService _inputStringService;
-        private ILabyrinth _labyrinth;
-        private IOutputStringService _outputService;
+        private readonly IInputStringService _inputStringService;
+        private readonly IOutputStringService _outputService;
 
         public LabyrinthService(IInputStringService inputStringService, IOutputStringService iOutputService)
         {
@@ -18,8 +19,6 @@ namespace Labyrinth.Services
 
         public void CreateLabyrinth(ILabyrinth labyrinth)
         {
-            _labyrinth = labyrinth;
-
             for (int i = 0; i < labyrinth.L; i++)
             {
                 _outputService.ConsoleOutupt("\n");
@@ -32,7 +31,7 @@ namespace Labyrinth.Services
                     {
                         if (inputString != null && inputString.Length == labyrinth.C)
                         {
-                            _labyrinth.LabyrinthArray[i, j, k] = new Quader(inputString[k], new QuaderLocation(i, j, k));
+                            labyrinth.LabyrinthArray[i, j, k] = new Quader(inputString[k], new QuaderLocation(i, j, k));
                         }
                         else
                         {
@@ -43,9 +42,10 @@ namespace Labyrinth.Services
             }
         }
 
-        public bool BreadthFirstSearch(ILabyrinth labyrinth, out int time)
+        public bool BreadthFirstSearch(ILabyrinth labyrinth, out List<IQuader> shortestPathList)
         {
-            time = 1;
+            shortestPathList = new List<IQuader>();
+
             var quadersQueue = new Queue<IQuader>();
 
             var startQuader = FindQuader(QuaderTypes.Start, labyrinth) ?? throw new FormatException("Not Found 'S' Quader");
@@ -55,61 +55,60 @@ namespace Labyrinth.Services
             while (quadersQueue.Count > 0)
             {
                 var currentQuader = quadersQueue.Dequeue();
-                
+
                 var adjacencyList = CreateAdjacencyList(currentQuader, labyrinth);
 
-                foreach (var quaderLocation in adjacencyList)
+                foreach (var quader in adjacencyList)
                 {
-                    time++;
-
-                    var nextQuader = labyrinth.LabyrinthArray[quaderLocation.X, quaderLocation.Y, quaderLocation.Z];
-                    
-                    if (nextQuader.Type == QuaderTypes.Exit) return true;
-                    
-                    if (nextQuader.Type == QuaderTypes.Air)
+                  
+                    if (quader.Type == QuaderTypes.Exit)
                     {
-                        nextQuader.Value = currentQuader.Value + 1;
-                        nextQuader.Type = QuaderTypes.Visited;
-                        quadersQueue.Enqueue(nextQuader);
+                        shortestPathList = FindShortestPath(quader, shortestPathList, labyrinth);
+                        return true;
+                    }
+
+                    if (quader.Type == QuaderTypes.Air)
+                    {
+                        quader.Value = currentQuader.Value + 1;
+                        quader.Type = QuaderTypes.Visited;
+                        quadersQueue.Enqueue(quader);
                     }
                 }
             }
             return false;
         }
 
-        public List<QuaderLocation> CreateAdjacencyList(IQuader quader, ILabyrinth labyrinth)
+        public List<IQuader> CreateAdjacencyList(IQuader quader, ILabyrinth labyrinth)
         {
-            QuaderLocation quaderLocation = quader.Location;
+            var adjacencyList = new List<IQuader>();
 
-            var adjacencyList = new List<QuaderLocation>();
+            int x = quader.Location.X;
+            int y = quader.Location.Y;
+            int z = quader.Location.Z;
 
-            int x = quaderLocation.X;
-            int y = quaderLocation.Y;
-            int z = quaderLocation.Z;
-            
             if (x + 1 < labyrinth.L)
             {
-                adjacencyList.Add(new QuaderLocation(x + 1, y, z));
+                adjacencyList.Add(labyrinth.LabyrinthArray[x + 1, y, z]);
             }
             if (y + 1 < labyrinth.R)
             {
-                adjacencyList.Add(new QuaderLocation(x, y + 1, z));
+                adjacencyList.Add(labyrinth.LabyrinthArray[x, y + 1, z]);
             }
             if (z + 1 < labyrinth.C)
             {
-                adjacencyList.Add(new QuaderLocation(x, y, z + 1));
+                adjacencyList.Add(labyrinth.LabyrinthArray[x, y, z + 1]);
             }
-            if (quaderLocation.X - 1 >= 0)
+            if (quader.Location.X - 1 >= 0)
             {
-                adjacencyList.Add(new QuaderLocation(x - 1, y, z));
+                adjacencyList.Add(labyrinth.LabyrinthArray[x - 1, y, z]);
             }
-            if (quaderLocation.Y - 1 >= 0)
+            if (quader.Location.Y - 1 >= 0)
             {
-                adjacencyList.Add(new QuaderLocation(x, y - 1, z));
+                adjacencyList.Add(labyrinth.LabyrinthArray[x, y - 1, z]);
             }
-            if (quaderLocation.Z - 1 >= 0)
+            if (quader.Location.Z - 1 >= 0)
             {
-                adjacencyList.Add(new QuaderLocation(x, y, z - 1));
+                adjacencyList.Add(labyrinth.LabyrinthArray[x, y, z - 1]);
             }
             return adjacencyList;
         }
@@ -148,24 +147,21 @@ namespace Labyrinth.Services
             }
         }
 
-        public int FindShortestPath(ILabyrinth labyrinth)
+        private List<IQuader> FindShortestPath(IQuader endQuader, List<IQuader> shortestPathList, ILabyrinth labyrinth)
         {
-            var exitQuader = FindQuader(QuaderTypes.Exit, labyrinth) ?? throw new FormatException("Not Found 'E' Quader");
+            shortestPathList.Add(endQuader);
 
-            var adjacencyList = CreateAdjacencyList(exitQuader, labyrinth);
-
-            int minTime = Int32.MaxValue;
-
-            foreach (var quaderLocation in adjacencyList)
+            if (endQuader.Type == QuaderTypes.Start)
             {
-                int time = labyrinth.LabyrinthArray[quaderLocation.X, quaderLocation.Y, quaderLocation.Z].Value;
-                if (time > 0 && time < minTime)
-                {
-                    minTime = time;
-                }
+                return shortestPathList;
             }
+           
+            var adjacencyList = CreateAdjacencyList(endQuader, labyrinth);
 
-            return minTime;
+            IQuader goalQuader = adjacencyList.Where(q => q.Value > 0).OrderBy(q => q.Value).First();
+
+            return FindShortestPath(goalQuader, shortestPathList, labyrinth);
+            
         }
     }
 }

@@ -1,14 +1,10 @@
-﻿using Xunit;
-using Labyrinth.Services;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Labyrinth.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Xunit;
 
-namespace Labyrinth.Services.Tests
+namespace Labyrinth.Test.Services
 {
     public class OutputStringServiceTests
     {
