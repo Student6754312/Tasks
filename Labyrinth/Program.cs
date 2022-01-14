@@ -56,7 +56,7 @@ namespace Labyrinth
                     }
 
                     var labyrinth = new Domain.Labyrinth(l, r, c);
-                    
+
                     labyrinthService!.CreateLabyrinth(labyrinth);
 
                     labyrinths.Add(labyrinth);
@@ -73,16 +73,13 @@ namespace Labyrinth
 
                 foreach (var labyrinth in labyrinths)
                 {
-                    labyrinthService!.BreadthFirstSearch(labyrinth);
-
-                    int minTime = labyrinthService.FindShortestPath(labyrinth);
-
-                    if (minTime == Int32.MaxValue)
+                    if (!labyrinthService!.BreadthFirstSearch(labyrinth, out int time))
                     {
                         outputService.ConsoleOutuptLine("Gefangen :-(\n");
                     }
                     else
                     {
+                        int minTime = labyrinthService.FindShortestPath(labyrinth);
                         outputService.ConsoleOutuptLine($"Entkommen in {minTime} Minute(n)!)\n");
                     }
                 }

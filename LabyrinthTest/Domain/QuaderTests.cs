@@ -15,18 +15,18 @@ namespace Labyrinth.Domain.Tests
         [InlineData('.', 0)]
         [InlineData('S', 1)]
         [InlineData('E', -2)]
-        public void QuaderTest(char type, int value)
+        public void QuaderTest(char view, int value)
         {
             // Arrange
 
             var location = new QuaderLocation (0, 0, 1);
 
             // Act
-            var quadr = new Quader(type, location);
+            var quadr = new Quader(view, location);
 
             //Assert
             Assert.Equal(quadr.Value, value);
-            Assert.Equal(quadr.Type, type);
+            Assert.Equal(quadr.View, view);
             Assert.Equal(quadr.Location, location);
         }
         [Fact]

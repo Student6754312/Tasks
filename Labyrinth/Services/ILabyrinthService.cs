@@ -6,9 +6,9 @@ namespace Labyrinth.Services
     public interface ILabyrinthService
     {
         void CreateLabyrinth(ILabyrinth labyrinth);
-        void BreadthFirstSearch(ILabyrinth labyrint);
-        List<QuaderLocation> CreateAdjacencyList(IQuader quader, ILabyrinth labyrint);
-        IQuader? FindQuader(QuaderTypes quaderType, ILabyrinth labyrint);
+        bool BreadthFirstSearch(ILabyrinth labyrinth, out int time);
+        List<QuaderLocation> CreateAdjacencyList(IQuader quader, ILabyrinth labyrinth);
+        IQuader? FindQuader(QuaderTypes quaderType, ILabyrinth labyrinth);
         void PrintLabyrinth(ILabyrinth labyrinth);
         int FindShortestPath(ILabyrinth labyrinth);
     }

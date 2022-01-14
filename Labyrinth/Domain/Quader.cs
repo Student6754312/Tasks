@@ -4,21 +4,23 @@ namespace Labyrinth.Domain
 {
      public class Quader : IQuader
     {
-        public char Type { get; }
+        public char View { get; }
+        public QuaderTypes Type { get; set; }
         public int Value { get; set; }
         public QuaderLocation Location { get; }
 
-        public Quader(char type, QuaderLocation location)
+        public Quader(char view, QuaderLocation location)
         {
-            Type = type;
-            Value = type switch
+            View = view;
+            Type = view switch
             {
-                '#' => (int)QuaderTypes.Stone,
-                '.' => (int)QuaderTypes.Air,
-                'S' => (int)QuaderTypes.Start,
-                'E' => (int)QuaderTypes.Exit,
-                _ => throw new FormatException($"Incorrect Quader Symbol - '{type}'")
+                '#' => QuaderTypes.Stone,
+                '.' => QuaderTypes.Air,
+                'S' => QuaderTypes.Start,
+                'E' => QuaderTypes.Exit,
+                _ => throw new FormatException($"Incorrect Quader Symbol - '{view}'")
             };
+            Value = (int)Type;
             Location = location;
         }
     }

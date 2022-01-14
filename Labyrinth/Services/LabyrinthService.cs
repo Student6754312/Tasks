@@ -43,60 +43,73 @@ namespace Labyrinth.Services
             }
         }
 
-        public void BreadthFirstSearch(ILabyrinth labyrint)
+        public bool BreadthFirstSearch(ILabyrinth labyrinth, out int time)
         {
+            time = 1;
             var quadersQueue = new Queue<IQuader>();
 
-            var startQuader = FindQuader(QuaderTypes.Start, labyrint) ?? throw new FormatException("Not Found 'S' Quader");
+            var startQuader = FindQuader(QuaderTypes.Start, labyrinth) ?? throw new FormatException("Not Found 'S' Quader");
 
             quadersQueue.Enqueue(startQuader);
 
             while (quadersQueue.Count > 0)
             {
                 var currentQuader = quadersQueue.Dequeue();
-                var adjacencyList = CreateAdjacencyList(currentQuader, labyrint);
+                
+                var adjacencyList = CreateAdjacencyList(currentQuader, labyrinth);
 
-                foreach (var quaderlocation in adjacencyList)
+                foreach (var quaderLocation in adjacencyList)
                 {
-                    var nextQuader = labyrint.LabyrinthArray[quaderlocation.X, quaderlocation.Y, quaderlocation.Z];
-                    if (nextQuader.Value == 0)
+                    time++;
+
+                    var nextQuader = labyrinth.LabyrinthArray[quaderLocation.X, quaderLocation.Y, quaderLocation.Z];
+                    
+                    if (nextQuader.Type == QuaderTypes.Exit) return true;
+                    
+                    if (nextQuader.Type == QuaderTypes.Air)
                     {
                         nextQuader.Value = currentQuader.Value + 1;
+                        nextQuader.Type = QuaderTypes.Visited;
                         quadersQueue.Enqueue(nextQuader);
                     }
                 }
             }
+            return false;
         }
 
-        public List<QuaderLocation> CreateAdjacencyList(IQuader quader, ILabyrinth labyrint)
+        public List<QuaderLocation> CreateAdjacencyList(IQuader quader, ILabyrinth labyrinth)
         {
             QuaderLocation quaderLocation = quader.Location;
 
             var adjacencyList = new List<QuaderLocation>();
 
-            if (quaderLocation.X + 1 < labyrint.LabyrinthArray.GetLength(0))
+            int x = quaderLocation.X;
+            int y = quaderLocation.Y;
+            int z = quaderLocation.Z;
+            
+            if (x + 1 < labyrinth.L)
             {
-                adjacencyList.Add(new QuaderLocation(quaderLocation.X + 1, quaderLocation.Y, quaderLocation.Z));
+                adjacencyList.Add(new QuaderLocation(x + 1, y, z));
             }
-            if (quaderLocation.Y + 1 < labyrint.LabyrinthArray.GetLength(1))
+            if (y + 1 < labyrinth.R)
             {
-                adjacencyList.Add(new QuaderLocation(quaderLocation.X, quaderLocation.Y + 1, quaderLocation.Z));
+                adjacencyList.Add(new QuaderLocation(x, y + 1, z));
             }
-            if (quaderLocation.Z + 1 < labyrint.LabyrinthArray.GetLength(2))
+            if (z + 1 < labyrinth.C)
             {
-                adjacencyList.Add(new QuaderLocation(quaderLocation.X, quaderLocation.Y, quaderLocation.Z + 1));
+                adjacencyList.Add(new QuaderLocation(x, y, z + 1));
             }
             if (quaderLocation.X - 1 >= 0)
             {
-                adjacencyList.Add(new QuaderLocation(quaderLocation.X - 1, quaderLocation.Y, quaderLocation.Z));
+                adjacencyList.Add(new QuaderLocation(x - 1, y, z));
             }
             if (quaderLocation.Y - 1 >= 0)
             {
-                adjacencyList.Add(new QuaderLocation(quaderLocation.X, quaderLocation.Y - 1, quaderLocation.Z));
+                adjacencyList.Add(new QuaderLocation(x, y - 1, z));
             }
             if (quaderLocation.Z - 1 >= 0)
             {
-                adjacencyList.Add(new QuaderLocation(quaderLocation.X, quaderLocation.Y, quaderLocation.Z - 1));
+                adjacencyList.Add(new QuaderLocation(x, y, z - 1));
             }
             return adjacencyList;
         }
@@ -109,7 +122,7 @@ namespace Labyrinth.Services
                 {
                     for (int k = 0; k < labyrinth.C; k++)
                     {
-                        if (labyrinth.LabyrinthArray[i, j, k].Value == (int)quaderType)
+                        if (labyrinth.LabyrinthArray[i, j, k].Type == quaderType)
                         {
                             return labyrinth.LabyrinthArray[i, j, k];
                         }
@@ -128,7 +141,7 @@ namespace Labyrinth.Services
                 {
                     for (int k = 0; k < labyrinth.C; k++)
                     {
-                        _outputService.ConsoleOutupt(labyrinth.LabyrinthArray[i, j, k].Type.ToString());
+                        _outputService.ConsoleOutupt(labyrinth.LabyrinthArray[i, j, k].View.ToString());
                     }
                     _outputService.ConsoleOutupt(Environment.NewLine);
                 }
