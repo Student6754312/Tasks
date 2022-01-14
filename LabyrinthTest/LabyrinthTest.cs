@@ -6,6 +6,7 @@ using System.Reflection;
 using Xunit;
 using Moq;
 using Labyrinth;
+using Labyrinth.Domain;
 using Xunit.Sdk;
 
 namespace LabyrinthTest
@@ -21,7 +22,7 @@ namespace LabyrinthTest
 
         public LabyrinthTest()
         {
-            var type = typeof(Labyrinth.Labyrinth);
+            var type = typeof(Labyrinth.Domain.Labyrinth);
             labyrinthInstance = Activator.CreateInstance(type, l, r, c);
             //FieldInfo[] fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
             //foreach (var field in fields)
@@ -39,7 +40,7 @@ namespace LabyrinthTest
         {
             // Arrange
             var inputString = "S\n#.\n##\nE.";
-            var labyrinth = new Labyrinth.Labyrinth(l, r, c);
+            var labyrinth = new Labyrinth.Domain.Labyrinth(l, r, c);
             var stringReader = new StringReader(inputString);
             Console.SetIn(stringReader);
 
@@ -57,7 +58,7 @@ namespace LabyrinthTest
         {
             // Arrange
             var inputString = "";
-            var labyrinth = new Labyrinth.Labyrinth(l, r, c);
+            var labyrinth = new Labyrinth.Domain.Labyrinth(l, r, c);
             var stringReader = new StringReader(inputString);
             Console.SetIn(stringReader);
 
@@ -77,7 +78,7 @@ namespace LabyrinthTest
             var inputString = "S.\n#.\n##\nE.";
             var stringReader = new StringReader(inputString);
             Console.SetIn(stringReader);
-            var labyrinth = new Labyrinth.Labyrinth(l, r, c);
+            var labyrinth = new Labyrinth.Domain.Labyrinth(l, r, c);
             
             // Act
             labyrinth.CreateLabyrinth();
@@ -156,7 +157,7 @@ namespace LabyrinthTest
 
         private MethodInfo GetPrivateMethod(string methodName)
         {
-            Type type = typeof(Labyrinth.Labyrinth);
+            Type type = typeof(Labyrinth.Domain.Labyrinth);
             var method = type.GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance);
             if (method == null)
             {
@@ -168,7 +169,7 @@ namespace LabyrinthTest
 
         private MethodInfo GetPublicMethod(string methodName)
         {
-            Type type = typeof(Labyrinth.Labyrinth);
+            Type type = typeof(Labyrinth.Domain.Labyrinth);
             var method = type.GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance);
             if (method == null)
             {

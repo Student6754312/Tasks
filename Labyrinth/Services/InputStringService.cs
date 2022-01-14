@@ -2,12 +2,8 @@
 
 namespace Labyrinth.Services
 {
-    public class InputStringServices
+    public class InputStringService : IInputStringService
     {
-        /// <summary>
-        /// Returns string from user
-        /// </summary>
-        /// <returns></returns>
         public string? GetStringFromUser()
         {
             return Console.ReadLine();

@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32002.261
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Labyrinth", "Labyrinth\Labyrinth.csproj", "{B11EFD06-3E22-47B5-AD90-2F87ADEA5083}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Labyrinth", "Labyrinth\Labyrinth.csproj", "{B11EFD06-3E22-47B5-AD90-2F87ADEA5083}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabyrinthTest", "LabyrinthTest\LabyrinthTest.csproj", "{0D9F64FD-4E12-43CE-AEC9-A22193FC2AA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Labyrinth.Test", "LabyrinthTest\Labyrinth.Test.csproj", "{0D9F64FD-4E12-43CE-AEC9-A22193FC2AA8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

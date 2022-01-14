@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Labyrinth
+namespace Labyrinth.Domain
 {
      public class Quader : IQuader
     {
