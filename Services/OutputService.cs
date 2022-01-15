@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace Labyrinth.Services
+namespace IOServices 
 {
-    public class OutputService : IOutputService
+    public class OutputService :IOutputService
     {
         public void ConsoleOutputLine(string str)
         {
-            Console.WriteLine(str);
+             Console.WriteLine(str);
         }
 
         public void ConsoleOutput(string str)

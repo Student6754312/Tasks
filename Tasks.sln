@@ -7,7 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Labyrinth", "Labyrinth\Laby
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Labyrinth.Test", "Labyrinth.Test\Labyrinth.Test.csproj", "{0D9F64FD-4E12-43CE-AEC9-A22193FC2AA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fibonacci", "Fibonacci\Fibonacci.csproj", "{70CFC959-31EA-4261-BC0E-DC68EC361754}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fibonacci", "Fibonacci\Fibonacci.csproj", "{70CFC959-31EA-4261-BC0E-DC68EC361754}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fibonacci.Test", "Fibonacci.Test\Fibonacci.Test.csproj", "{5C738D12-1F59-4B5D-86A3-0976D3D39803}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IOServices", "Services\IOServices.csproj", "{59D7B204-42E2-4EE9-9909-071E9B235003}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IOServices.Tests", "IOServices.Tests\IOServices.Tests.csproj", "{6458CA00-B1B4-4414-87F4-D703D55A74C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +33,18 @@ Global
 		{70CFC959-31EA-4261-BC0E-DC68EC361754}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70CFC959-31EA-4261-BC0E-DC68EC361754}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70CFC959-31EA-4261-BC0E-DC68EC361754}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C738D12-1F59-4B5D-86A3-0976D3D39803}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C738D12-1F59-4B5D-86A3-0976D3D39803}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C738D12-1F59-4B5D-86A3-0976D3D39803}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C738D12-1F59-4B5D-86A3-0976D3D39803}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59D7B204-42E2-4EE9-9909-071E9B235003}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59D7B204-42E2-4EE9-9909-071E9B235003}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59D7B204-42E2-4EE9-9909-071E9B235003}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59D7B204-42E2-4EE9-9909-071E9B235003}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6458CA00-B1B4-4414-87F4-D703D55A74C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6458CA00-B1B4-4414-87F4-D703D55A74C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6458CA00-B1B4-4414-87F4-D703D55A74C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6458CA00-B1B4-4414-87F4-D703D55A74C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

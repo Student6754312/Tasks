@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using IOServices;
 using Labyrinth.Domain;
 
 namespace Labyrinth.Services
@@ -25,7 +26,7 @@ namespace Labyrinth.Services
 
                 for (int j = 0; j < labyrinth.R; j++)
                 {
-                    string? inputString = _inputStringService.GetStringFromUser();
+                    string? inputString = _inputStringService.GetStringFromUserConsole();
 
                     for (int k = 0; k < labyrinth.C; k++)
                     {

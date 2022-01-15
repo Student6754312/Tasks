@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using IOServices;
 using Labyrinth.Domain;
 using Labyrinth.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +12,7 @@ namespace Labyrinth
         static void Main(string[] args)
         {
 
-            IOutputService outputService = null!;
+            IOutputService? outputService = null;
 
             try
             {
@@ -22,7 +23,7 @@ namespace Labyrinth
                           .AddSingleton<IOutputService, OutputService>()
                           .BuildServiceProvider();
 
-                outputService = serviceProvider.GetService<IOutputService>()!;
+                outputService = serviceProvider.GetService<IOutputService>();
 
                 int l, r, c;
                 var labyrinths = new List<ILabyrinth>();
@@ -33,8 +34,8 @@ namespace Labyrinth
 
                 while (true)
                 {
-                    outputService.ConsoleOutputLine("L R C");
-                    string? inputString = inputStringService!.GetStringFromUser();
+                    outputService!.ConsoleOutputLine("L R C");
+                    string? inputString = inputStringService!.GetStringFromUserConsole();
 
                     var parameters = inputString!.Split(' ');
 
@@ -60,7 +61,7 @@ namespace Labyrinth
                     labyrinthService!.CreateLabyrinth(labyrinth);
 
                     labyrinths.Add(labyrinth);
-                    outputService.ConsoleOutput(Environment.NewLine);
+                    outputService?.ConsoleOutput(Environment.NewLine);
                 }
 
                 if (labyrinths.Count == 0)
@@ -79,23 +80,23 @@ namespace Labyrinth
                     }
                     else
                     {
-                       var minTime = shortestPathList[1].Value;
-                       outputService.ConsoleOutputLine($"Entkommen in {minTime} Minute(n)!)\n");
+                        var minTime = shortestPathList[1].Value;
+                        outputService.ConsoleOutputLine($"Entkommen in {minTime} Minute(n)!)\n");
                     }
                 }
 
             }
             catch (FormatException ex)
             {
-                if (outputService != null) outputService.ConsoleOutputLine($"\nInput Error: {ex.Message}");
+                outputService?.ConsoleOutputLine($"\nInput Error: {ex.Message}");
             }
             catch (Exception ex)
             {
-                if (outputService != null) outputService.ConsoleOutputLine($"\nUnexpected Error: {ex.Message}");
+                 outputService?.ConsoleOutputLine($"\nUnexpected Error: {ex.Message}");
             }
             finally
             {
-                if (outputService != null) outputService.ConsoleOutputLine("\nExit!");
+                outputService?.ConsoleOutputLine("\nExit!");
             }
         }
 
