@@ -19,21 +19,9 @@ namespace Labyrinth
 
             try
             {
-                var configuration = new ConfigurationBuilder()
-                    .AddJsonFile("appsettings.json")
-                    .Build();
-
-                var configSection = configuration.GetSection("ApplicationSettings");
-                
+               
                 //Setup DI
-                var serviceProvider = new ServiceCollection()
-                    .AddTransient<IInputService, InputFromConsoleService>()
-                    .AddTransient<IInputSelectionFactory, InputSelectionFactory>()
-                    .AddSingleton<IInputService, InputFromFileService>()
-                    .AddSingleton<IOutputService, OutputService>()
-                    .Configure<ApplicationSettings>(configSection)
-                    .AddTransient<ILabyrinthService, LabyrinthService>()
-                    .BuildServiceProvider();
+                var serviceProvider = DependencyContainer.GetContainer();
 
                 outputService = serviceProvider.GetService<IOutputService>();
                 var labyrinthService = serviceProvider.GetService<ILabyrinthService>();

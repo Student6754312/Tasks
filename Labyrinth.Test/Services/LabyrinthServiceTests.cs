@@ -21,9 +21,10 @@ namespace Labyrinth.Test.Services
         public LabyrinthServiceTests()
         {
             _serviceProvider = new ServiceCollection()
-                .AddSingleton<IInputService, InputService>()
-                .AddSingleton<ILabyrinthService, LabyrinthService>()
-                .AddSingleton<IOutputService, OutputService>()
+                .AddTransient<IInputService, InputFromConsoleService>()
+                .AddSingleton<IInputService, InputFromFileService>()
+                .AddTransient<ILabyrinthService, LabyrinthService>()
+                .AddTransient<IOutputService, OutputService>()
                 .BuildServiceProvider();
         }
 

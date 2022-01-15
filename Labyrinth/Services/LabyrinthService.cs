@@ -60,7 +60,6 @@ namespace Labyrinth.Services
 
                 foreach (var quader in adjacencyList)
                 {
-
                     if (quader.Type == QuaderTypes.Exit)
                     {
                         shortestPathList = FindShortestPath(quader, shortestPathList, labyrinth);
@@ -136,6 +135,7 @@ namespace Labyrinth.Services
             for (int i = 0; i < labyrinth.L; i++)
             {
                 _outputService.ConsoleOutput(Environment.NewLine);
+               
                 for (int j = 0; j < labyrinth.R; j++)
                 {
                     for (int k = 0; k < labyrinth.C; k++)

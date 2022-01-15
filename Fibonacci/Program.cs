@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Fibonacci.Factory;
 using Fibonacci.Services;
 using IOServices;
-using Microsoft.Extensions.Configuration;
+using Labyrinth;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Fibonacci
@@ -17,22 +16,8 @@ namespace Fibonacci
 
             try
             {
-                var configuration = new ConfigurationBuilder()
-                    .AddJsonFile("appsettings.json")
-                    .Build();
-                
-                var configSection = configuration.GetSection("ApplicationSettings");
-                
-                
                 //Setup DI
-                var serviceProvider = new ServiceCollection()
-                    .AddTransient<IInputService, InputFromConsoleService>()
-                    .AddTransient<IInputSelectionFactory, InputSelectionFactory>()
-                    .AddTransient<IFibonacciService, FibonacciService>()
-                    .AddSingleton<IInputService, InputFromFileService>()
-                    .AddSingleton<IOutputService, OutputService>()
-                    .Configure<ApplicationSettings>(configSection)
-                    .BuildServiceProvider();
+                var serviceProvider = DependencyContainer.GetContainer();
 
                 outputService = serviceProvider.GetService<IOutputService>();
                 var fibonacciService = serviceProvider.GetService<IFibonacciService>();
@@ -43,14 +28,14 @@ namespace Fibonacci
                 var numberList = new List<int>();
 
                 outputService!.ConsoleOutput("Geben Sie, bitte Anzahl von Zahlen ein: ");
-                
+
                 int n = Convert.ToInt32(inputService.Input());
-                
+
                 for (int i = 0; i < n; i++)
                 {
                     numberList.Add(Convert.ToInt32(inputService.Input()));
                 }
-                
+
                 foreach (var number in numberList)
                 {
                     outputService.ConsoleOutputLine(
@@ -74,12 +59,12 @@ namespace Fibonacci
 
         static int GenerateDigit(Random rng)
         {
-           return (short)rng.Next(5000);
+            return (short)rng.Next(5000);
         }
     }
 }
-                //Random rng = new Random();
-                //for (int i = 1; i < 523; i++)
-                //{
-                //    numberList.Add(GenerateDigit(rng));
-                //}
+//Random rng = new Random();
+//for (int i = 1; i < 523; i++)
+//{
+//    numberList.Add(GenerateDigit(rng));
+//}
