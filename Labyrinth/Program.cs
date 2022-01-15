@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Fibonacci;
+using Fibonacci.Factory;
 using IOServices;
 using Labyrinth.Domain;
 using Labyrinth.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Labyrinth
@@ -16,26 +19,35 @@ namespace Labyrinth
 
             try
             {
+                var configuration = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+
+                var configSection = configuration.GetSection("ApplicationSettings");
+                
                 //Setup DI
                 var serviceProvider = new ServiceCollection()
-                          .AddSingleton<IInputService, InputService>()
-                          .AddSingleton<ILabyrinthService, LabyrinthService>()
-                          .AddSingleton<IOutputService, OutputService>()
-                          .BuildServiceProvider();
+                    .AddTransient<IInputService, InputFromConsoleService>()
+                    .AddTransient<IInputSelectionFactory, InputSelectionFactory>()
+                    .AddSingleton<IInputService, InputFromFileService>()
+                    .AddSingleton<IOutputService, OutputService>()
+                    .Configure<ApplicationSettings>(configSection)
+                    .AddTransient<ILabyrinthService, LabyrinthService>()
+                    .BuildServiceProvider();
 
                 outputService = serviceProvider.GetService<IOutputService>();
+                var labyrinthService = serviceProvider.GetService<ILabyrinthService>();
+                var inputSelectionFactory = serviceProvider.GetRequiredService<IInputSelectionFactory>();
+                var inputService = inputSelectionFactory.GetInputService();
 
                 int l, r, c;
                 var labyrinths = new List<ILabyrinth>();
-
-                var labyrinthService = serviceProvider.GetService<ILabyrinthService>();
-                var inputStringService = serviceProvider.GetService<IInputService>();
 
 
                 while (true)
                 {
                     outputService!.ConsoleOutputLine("L R C");
-                    string? inputString = inputStringService!.GetStringFromUserConsole();
+                    string? inputString = inputService.Input();
 
                     var parameters = inputString!.Split(' ');
 
@@ -92,7 +104,7 @@ namespace Labyrinth
             }
             catch (Exception ex)
             {
-                 outputService?.ConsoleOutputLine($"\nUnexpected Error: {ex.Message}");
+                outputService?.ConsoleOutputLine($"\nUnexpected Error: {ex.Message}");
             }
             finally
             {

@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fibonacci", "Fibonacci\Fibo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fibonacci.Test", "Fibonacci.Test\Fibonacci.Test.csproj", "{5C738D12-1F59-4B5D-86A3-0976D3D39803}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IOServices", "Services\IOServices.csproj", "{59D7B204-42E2-4EE9-9909-071E9B235003}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IOServices", "IOServices\IOServices.csproj", "{59D7B204-42E2-4EE9-9909-071E9B235003}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IOServices.Tests", "IOServices.Tests\IOServices.Tests.csproj", "{6458CA00-B1B4-4414-87F4-D703D55A74C2}"
 EndProject

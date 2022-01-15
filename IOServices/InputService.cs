@@ -7,7 +7,7 @@ using System.Text;
 namespace IOServices
 {
 
-    public class InputService : IInputService
+    public class InputService 
     {
 
         readonly IFileSystem _fileSystem;

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Fibonacci.Factory;
 using Fibonacci.Services;
 using IOServices;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Fibonacci
@@ -15,42 +17,40 @@ namespace Fibonacci
 
             try
             {
+                var configuration = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+                
+                var configSection = configuration.GetSection("ApplicationSettings");
+                
+                
                 //Setup DI
                 var serviceProvider = new ServiceCollection()
-                    .AddSingleton<IInputService, InputService>()
+                    .AddTransient<IInputService, InputFromConsoleService>()
+                    .AddTransient<IInputSelectionFactory, InputSelectionFactory>()
+                    .AddTransient<IFibonacciService, FibonacciService>()
+                    .AddSingleton<IInputService, InputFromFileService>()
                     .AddSingleton<IOutputService, OutputService>()
-                    .AddSingleton<IFibonacciService, FibonacciService>()
+                    .Configure<ApplicationSettings>(configSection)
                     .BuildServiceProvider();
 
                 outputService = serviceProvider.GetService<IOutputService>();
-                var inputService = serviceProvider.GetService<IInputService>();
                 var fibonacciService = serviceProvider.GetService<IFibonacciService>();
+                var inputSelectionFactory = serviceProvider.GetRequiredService<IInputSelectionFactory>();
+                var inputService = inputSelectionFactory.GetInputService();
 
-
-                var s = inputService.GetFromFile(@"D:\Users\Konstantin\Desktop\file.txt"); 
-                    
 
                 var numberList = new List<int>();
 
-                s.Split("\r\n").Where(s=>s.Length>0).ToList()
-                    .ForEach(x => numberList.Add(Convert.ToInt32(x)));
+                outputService!.ConsoleOutput("Geben Sie, bitte Anzahl von Zahlen ein: ");
                 
-                // outputService!.ConsoleOutput("Geben Sie, bitte Anzahl von Zahlen ein: ");
-
-                //int n = Convert.ToInt32(inputService!.GetStringFromUserConsole());
-                //for (int i = 0; i < n; i++)
-                //{
-                //    numberList.Add(Convert.ToInt32(inputService.GetStringFromUserConsole()));
-                //}
-
-
-                //Random rng = new Random();
-                //for (int i = 1; i < 523; i++)
-                //{
-                //    numberList.Add(GenerateDigit(rng));
-                //}
-
-
+                int n = Convert.ToInt32(inputService.Input());
+                
+                for (int i = 0; i < n; i++)
+                {
+                    numberList.Add(Convert.ToInt32(inputService.Input()));
+                }
+                
                 foreach (var number in numberList)
                 {
                     outputService.ConsoleOutputLine(
@@ -78,3 +78,8 @@ namespace Fibonacci
         }
     }
 }
+                //Random rng = new Random();
+                //for (int i = 1; i < 523; i++)
+                //{
+                //    numberList.Add(GenerateDigit(rng));
+                //}

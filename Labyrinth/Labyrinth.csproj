@@ -5,20 +5,24 @@
 		<TargetFramework>net5.0</TargetFramework>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
-
+	
 	<ItemGroup>
-	  <Compile Remove="Services\IInputService.cs" />
-	  <Compile Remove="Services\InputService.cs" />
-	  <Compile Remove="Services\IOutputService.cs" />
-	  <Compile Remove="Services\OutputService.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
+	  <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+	  <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Services\IOServices.csproj" />
+	  <ProjectReference Include="..\IOServices\IOServices.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="appsettings.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="input.txt">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

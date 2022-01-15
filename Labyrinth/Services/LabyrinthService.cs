@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Fibonacci.Factory;
 using IOServices;
 using Labyrinth.Domain;
 
@@ -9,13 +10,13 @@ namespace Labyrinth.Services
 {
     public class LabyrinthService : ILabyrinthService
     {
-        private readonly IInputService _inputStringService;
+        private readonly IInputService _inputService;
         private readonly IOutputService _outputService;
 
-        public LabyrinthService(IInputService inputStringService, IOutputService iOutputService)
+        public LabyrinthService(IInputSelectionFactory inputSelectionFactory, IOutputService outputService)
         {
-            _inputStringService = inputStringService;
-            _outputService = iOutputService;
+            _inputService = inputSelectionFactory.GetInputService();
+            _outputService = outputService;
         }
 
         public void CreateLabyrinth(ILabyrinth labyrinth)
@@ -26,18 +27,16 @@ namespace Labyrinth.Services
 
                 for (int j = 0; j < labyrinth.R; j++)
                 {
-                    string? inputString = _inputStringService.GetStringFromUserConsole();
+                    string? inputString = _inputService.Input();
+                    
+                    if (inputString == null || inputString.Length != labyrinth.C)
+                    {
+                        throw new FormatException($"Wrong Number of Quaders in a row (L={i}, R={j}) - '{inputString}'");
+                    }
 
                     for (int k = 0; k < labyrinth.C; k++)
                     {
-                        if (inputString != null && inputString.Length == labyrinth.C)
-                        {
-                            labyrinth.LabyrinthArray[i, j, k] = new Quader(inputString[k], new QuaderLocation(i, j, k));
-                        }
-                        else
-                        {
-                            throw new FormatException($"Wrong Number of Quaders in a row '{inputString}'");
-                        }
+                        labyrinth.LabyrinthArray[i, j, k] = new Quader(inputString[k], new QuaderLocation(i, j, k));
                     }
                 }
             }
@@ -61,7 +60,7 @@ namespace Labyrinth.Services
 
                 foreach (var quader in adjacencyList)
                 {
-                  
+
                     if (quader.Type == QuaderTypes.Exit)
                     {
                         shortestPathList = FindShortestPath(quader, shortestPathList, labyrinth);
@@ -156,13 +155,13 @@ namespace Labyrinth.Services
             {
                 return shortestPathList;
             }
-           
+
             var adjacencyList = CreateAdjacencyList(endQuader, labyrinth);
 
             IQuader goalQuader = adjacencyList.Where(q => q.Value > 0).OrderBy(q => q.Value).First();
 
             return FindShortestPath(goalQuader, shortestPathList, labyrinth);
-            
+
         }
     }
 }
