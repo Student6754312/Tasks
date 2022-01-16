@@ -12,7 +12,7 @@ namespace IOServices.Tests
             // Arrange
             var stringWriter = new StringWriter();
             Console.SetOut(stringWriter);
-            IOutputService iOutputService = new OutputService();
+            IOutputService iOutputService = new OutputToConsoleService();
 
             // Act
             iOutputService.ConsoleOutputLine("S.#.##E.");
@@ -27,7 +27,7 @@ namespace IOServices.Tests
             // Arrange
             var stringWriter = new StringWriter();
             Console.SetOut(stringWriter);
-            IOutputService iOutputService = new OutputService();
+            IOutputService iOutputService = new OutputToConsoleService();
 
             // Act
             iOutputService.ConsoleOutput("S.");

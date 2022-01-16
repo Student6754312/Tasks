@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Labyrinth.Test.Services
 {
-    public class LabyrinthServiceConsoleTests
+    public class LabyrinthServiceTests
     {
         int l = 2;
         int r = 2;
@@ -18,7 +18,7 @@ namespace Labyrinth.Test.Services
         
         private IServiceProvider _serviceProvider;
 
-        public LabyrinthServiceConsoleTests()
+        public LabyrinthServiceTests()
         {
             _serviceProvider = DependencyContainer.GetContainer("appsettings.console.test.json");
         }

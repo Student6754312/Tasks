@@ -22,7 +22,7 @@ namespace Labyrinth.Test
                 .AddTransient<IInputService, InputFromConsoleService>()
                 .AddTransient<IInputSelectionFactory, InputSelectionFactory>()
                 .AddSingleton<IInputService, InputFromFileService>()
-                .AddSingleton<IOutputService, OutputService>()
+                .AddSingleton<IOutputService, OutputToConsoleService>()
                 .Configure<ApplicationSettings>(configSection)
                 .AddTransient<ILabyrinthService, LabyrinthService>()
                 .BuildServiceProvider();
