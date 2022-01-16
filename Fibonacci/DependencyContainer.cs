@@ -1,11 +1,14 @@
 ﻿using System;
+using Fibonacci;
+using Fibonacci.Domain;
 using Fibonacci.Services;
-using Fibonacci.Services.ServiceFactory;
 using IOServices;
+using IOServices.ServicesFactory;
+using Labyrinth.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Fibonacci
+namespace Labyrinth
 {
     internal static class DependencyContainer
     {
@@ -19,12 +22,15 @@ namespace Fibonacci
 
             //Setup DI
             return new ServiceCollection()
+                .AddTransient<ITaskSolution, TaskSolution>()
                 .AddTransient<IInputService, InputFromConsoleService>()
-                .AddTransient<IInputSelectionFactory, InputSelectionFactory>()
-                .AddTransient<IFibonacciService, FibonacciService>()
+                .AddTransient<IOutputService, OutputToConsoleService>()
                 .AddSingleton<IInputService, InputFromFileService>()
-                .AddSingleton<IOutputService, OutputService>()
+                .AddTransient<IOutputService, OutputToFileService>()
+                .AddTransient<IFibonacciService, FibonacciService>()
                 .Configure<ApplicationSettings>(configSection)
+                .AddTransient<IInputServiceFactory, InputServiceFactory>()
+                .AddTransient<IOutputServiceFactory,OutputServiceFactory >()
                 .BuildServiceProvider();
         }
 

@@ -6,19 +6,19 @@ namespace Fibonacci.Services
     public class FibonacciService : IFibonacciService
 
     {
-        private static readonly Matrix2x2 FibMatrix = new Matrix2x2 { x11 = 1, x12 = 1, x21 = 1 };
-        private static readonly Matrix2x2 IdentityMatrix = new Matrix2x2 { x11 = 1, x22 = 1 };
+        private readonly Matrix2x2 _fibMatrix = new () { X11 = 1, X12 = 1, X21 = 1 };
+        private readonly Matrix2x2 _identityMatrix = new () { X11 = 1, X22 = 1 };
 
         public BigInteger Fib(int n)
         {
-            return numberPower(FibMatrix, (n - 1)).x11;
+            return NumberPower(_fibMatrix, (n - 1)).X11;
         }
 
-        private Matrix2x2 numberPower(Matrix2x2 x, int power)
+        private Matrix2x2 NumberPower(Matrix2x2 x, int power)
         {
             if (power == 0)
             {
-                return IdentityMatrix;
+                return _identityMatrix;
             }
 
             if (power == 1)
@@ -28,13 +28,16 @@ namespace Fibonacci.Services
 
             int n = sizeof(int) * 8 - 1;
 
-            while ((power <<= 1) >= 0) n--;
+            while ((power <<= 1) >= 0)
+            {
+                n--;
+            }
             
             Matrix2x2 tempMatrix = x;
 
             while (--n > 0)
             {
-                tempMatrix = (tempMatrix * tempMatrix) * (((power <<= 1) < 0) ? x : IdentityMatrix);
+                tempMatrix = (tempMatrix * tempMatrix) * (((power <<= 1) < 0) ? x : _identityMatrix);
             }
 
             return tempMatrix;

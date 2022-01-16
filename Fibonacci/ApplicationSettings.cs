@@ -2,6 +2,6 @@
 {
     public class ApplicationSettings
     {
-        public string DefaultInputService { get; set; } = null!;
+        public string DefaultService { get; set; } = null!;
     }
 }

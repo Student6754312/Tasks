@@ -2,7 +2,7 @@
 
 namespace IOServices 
 {
-    public class OutputService :IOutputService
+    public class OutputToConsoleService :IOutputService
     {
         public void ConsoleOutputLine(string str)
         {
@@ -12,6 +12,11 @@ namespace IOServices
         public void ConsoleOutput(string str)
         {
             Console.Write(str);
+        }
+
+        public void Output(string str)
+        {
+            Console.WriteLine(str);
         }
     }
 }

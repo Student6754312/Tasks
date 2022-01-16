@@ -7,12 +7,9 @@ namespace IOServices
 {
     public class InputFromFileBaseService : IInputService
     {
-        private List<string> _fileStringsList;
-
-        private IFileSystem _fileSystem;
-
+        private readonly List<string> _fileStringsList;
+        private readonly IFileSystem _fileSystem;
         private int _index = 0;
-
 
         public InputFromFileBaseService() : this(new FileSystem()) { }
 

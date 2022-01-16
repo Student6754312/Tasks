@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using IOServices;
+using IOServices.ServicesFactory;
+using IOServices.ServicesFactory.Base;
 using Labyrinth.Domain;
 using Labyrinth.Services;
-using Labyrinth.Services.ServiceFactory;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Labyrinth
@@ -20,81 +21,30 @@ namespace Labyrinth
             {
                 //Setup DI
                 var serviceProvider = DependencyContainer.GetContainer();
+               
+                var taskSolution = serviceProvider.GetRequiredService<ITaskSolution>();
+                
+                var labyrinthList = new List<ILabyrinth>();
 
-                outputService = serviceProvider.GetService<IOutputService>();
-                var labyrinthService = serviceProvider.GetService<ILabyrinthService>();
-                var inputSelectionFactory = serviceProvider.GetRequiredService<IInputSelectionFactory>();
-                var inputService = inputSelectionFactory.GetInputService();
+                taskSolution.Input(labyrinthList);
 
-                int l, r, c;
-                var labyrinths = new List<ILabyrinth>();
-
-
-                while (true)
-                {
-                    outputService!.ConsoleOutputLine("L R C");
-                    string? inputString = inputService.Input();
-
-                    var parameters = inputString!.Split(' ');
-
-                    if (parameters.Length == 3)
-                    {
-                        l = Convert.ToInt32(parameters[0]);
-                        r = Convert.ToInt32(parameters[1]);
-                        c = Convert.ToInt32(parameters[2]);
-                    }
-                    else
-                    {
-                        throw new FormatException("Wrong Labyrinth Parameters");
-                    }
-
-                    if (l == 0 && r == 0 && c == 0)
-                    {
-                        outputService.ConsoleOutput(Environment.NewLine);
-                        break;
-                    }
-
-                    var labyrinth = new Domain.Labyrinth(l, r, c);
-
-                    labyrinthService!.CreateLabyrinth(labyrinth);
-
-                    labyrinths.Add(labyrinth);
-                    outputService?.ConsoleOutput(Environment.NewLine);
-                }
-
-                if (labyrinths.Count == 0)
-                {
-                    outputService.ConsoleOutputLine("Exit!");
-                    return;
-                }
-
-                outputService.ConsoleOutputLine("Ausgabe:\n");
-
-                foreach (var labyrinth in labyrinths)
-                {
-                    if (!labyrinthService!.BreadthFirstSearch(labyrinth, out List<IQuader> shortestPathList))
-                    {
-                        outputService.ConsoleOutputLine("Gefangen :-(\n");
-                    }
-                    else
-                    {
-                        var minTime = shortestPathList[1].Value;
-                        outputService.ConsoleOutputLine($"Entkommen in {minTime} Minute(n)!)\n");
-                    }
-                }
-
+                taskSolution.Output(labyrinthList);
             }
             catch (FormatException ex)
             {
-                outputService?.ConsoleOutputLine($"\nInput Error: {ex.Message}");
+                outputService?.Output($"\nInput Error: {ex.Message}");
+            }
+            catch (FileNotFoundException ex)
+            {
+                outputService?.Output($"\nFile Not Found Error: {ex.Message}");
             }
             catch (Exception ex)
             {
-                outputService?.ConsoleOutputLine($"\nUnexpected Error: {ex.Message}");
+                outputService?.Output($"\nUnexpected Error: {ex.Message}");
             }
             finally
             {
-                outputService?.ConsoleOutputLine("\nExit!");
+                outputService?.Output("\nExit!");
             }
         }
     }

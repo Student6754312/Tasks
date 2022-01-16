@@ -1,6 +1,4 @@
-﻿using IOServices;
-
-namespace Labyrinth.Services
+﻿namespace IOServices
 {
     public class InputFromFileService : InputFromFileBaseService
     {
@@ -14,7 +12,7 @@ namespace Labyrinth.Services
         public override string? Input()
         {
             var str = base.Input();
-            _outputService.ConsoleOutputLine($"{str}\n");
+            _outputService.Output($"{str}\n");
             return str;
         }
 

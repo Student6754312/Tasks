@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using IOServices;
+using IOServices.ServicesFactory.Base;
 using Labyrinth.Domain;
-using Labyrinth.Services.ServiceFactory;
 
 namespace Labyrinth.Services
 {
@@ -13,9 +12,9 @@ namespace Labyrinth.Services
         private readonly IInputService _inputService;
         private readonly IOutputService _outputService;
 
-        public LabyrinthService(IInputSelectionFactory inputSelectionFactory, IOutputService outputService)
+        public LabyrinthService(IInputServiceFactory inputSelectionFactory, IOutputService outputService)
         {
-            _inputService = inputSelectionFactory.GetInputService();
+            _inputService = inputSelectionFactory.GetService();
             _outputService = outputService;
         }
 
@@ -23,7 +22,7 @@ namespace Labyrinth.Services
         {
             for (int i = 0; i < labyrinth.L; i++)
             {
-                _outputService.ConsoleOutput("\n");
+                _outputService.Output("\n");
 
                 for (int j = 0; j < labyrinth.R; j++)
                 {
@@ -134,15 +133,15 @@ namespace Labyrinth.Services
         {
             for (int i = 0; i < labyrinth.L; i++)
             {
-                _outputService.ConsoleOutput(Environment.NewLine);
+                _outputService.Output(Environment.NewLine);
 
                 for (int j = 0; j < labyrinth.R; j++)
                 {
                     for (int k = 0; k < labyrinth.C; k++)
                     {
-                        _outputService.ConsoleOutput(labyrinth.LabyrinthArray[i, j, k].View.ToString());
+                        _outputService.Output(labyrinth.LabyrinthArray[i, j, k].View.ToString());
                     }
-                    _outputService.ConsoleOutput(Environment.NewLine);
+                    _outputService.Output(Environment.NewLine);
                 }
             }
         }

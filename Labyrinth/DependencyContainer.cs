@@ -1,7 +1,9 @@
 ﻿using System;
 using IOServices;
+using IOServices.ServicesFactory;
+using IOServices.ServicesFactory.Base;
+using Labyrinth.Domain;
 using Labyrinth.Services;
-using Labyrinth.Services.ServiceFactory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,12 +21,15 @@ namespace Labyrinth
 
             //Setup DI
             return new ServiceCollection()
+                .AddTransient<ITaskSolution, TaskSolution>()
                 .AddTransient<IInputService, InputFromConsoleService>()
-                .AddTransient<IInputSelectionFactory, InputSelectionFactory>()
+                .AddTransient<IOutputService, OutputToConsoleService>()
                 .AddSingleton<IInputService, InputFromFileService>()
-                .AddSingleton<IOutputService, OutputService>()
-                .Configure<ApplicationSettings>(configSection)
+                .AddTransient<IOutputService, OutputToFileService>()
                 .AddTransient<ILabyrinthService, LabyrinthService>()
+                .Configure<ApplicationSettings>(configSection)
+                .AddTransient<IInputServiceFactory, InputServiceFactory>()
+                .AddTransient<IOutputServiceFactory,OutputServiceFactory >()
                 .BuildServiceProvider();
         }
 
