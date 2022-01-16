@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Fibonacci.Factory;
 using IOServices;
 using Labyrinth.Domain;
+using Labyrinth.Services.ServiceFactory;
 
 namespace Labyrinth.Services
 {
@@ -28,10 +28,10 @@ namespace Labyrinth.Services
                 for (int j = 0; j < labyrinth.R; j++)
                 {
                     string? inputString = _inputService.Input();
-                    
+
                     if (inputString == null || inputString.Length != labyrinth.C)
                     {
-                        throw new FormatException($"Wrong Number of Quaders in a row (L={i}, R={j}) - '{inputString}'");
+                        throw new FormatException($"Wrong Number of Quaders in a row(L = {i + 1}, R = {j + 1}) - '{inputString}'");
                     }
 
                     for (int k = 0; k < labyrinth.C; k++)
@@ -135,7 +135,7 @@ namespace Labyrinth.Services
             for (int i = 0; i < labyrinth.L; i++)
             {
                 _outputService.ConsoleOutput(Environment.NewLine);
-               
+
                 for (int j = 0; j < labyrinth.R; j++)
                 {
                     for (int k = 0; k < labyrinth.C; k++)

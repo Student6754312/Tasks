@@ -5,14 +5,14 @@ using Labyrinth.Services.ServiceFactory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Labyrinth
+namespace Labyrinth.Test
 {
     internal static class DependencyContainer
     {
-        internal static IServiceProvider GetContainer()
+        internal static IServiceProvider GetContainer(string appsettingsFileName)
         {
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
+                .AddJsonFile(appsettingsFileName)
                 .Build();
 
             var configSection = configuration.GetSection("ApplicationSettings");

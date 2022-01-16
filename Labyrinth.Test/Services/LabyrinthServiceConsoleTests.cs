@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using IOServices;
 using Labyrinth.Domain;
 using Labyrinth.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,21 +10,17 @@ using Xunit;
 
 namespace Labyrinth.Test.Services
 {
-    public class LabyrinthServiceTests
+    public class LabyrinthServiceConsoleTests
     {
         int l = 2;
         int r = 2;
         int c = 2;
-        private ServiceProvider _serviceProvider;
+        
+        private IServiceProvider _serviceProvider;
 
-        public LabyrinthServiceTests()
+        public LabyrinthServiceConsoleTests()
         {
-            _serviceProvider = new ServiceCollection()
-                .AddTransient<IInputService, InputFromConsoleService>()
-                .AddSingleton<IInputService, InputFromFileService>()
-                .AddTransient<ILabyrinthService, LabyrinthService>()
-                .AddTransient<IOutputService, OutputService>()
-                .BuildServiceProvider();
+            _serviceProvider = DependencyContainer.GetContainer("appsettings.console.test.json");
         }
 
         [Fact]
@@ -37,7 +32,7 @@ namespace Labyrinth.Test.Services
             Console.SetIn(stringReader);
 
             var labyrinthService = _serviceProvider.GetService<ILabyrinthService>();
-
+            
             var labyrinthArray = new IQuader[l, r, c];
             var mockLabyrinth = CreateILabyrinthMock(labyrinthArray);
 
@@ -46,7 +41,7 @@ namespace Labyrinth.Test.Services
 
             // Assert
             FormatException exception = Assert.Throws<FormatException>(act);
-            Assert.Equal("Wrong Number of Quaders in a row 'S'", exception.Message);
+            Assert.Equal("Wrong Number of Quaders in a row(L = 1, R = 1) - 'S'", exception.Message);
         }
 
 
@@ -68,11 +63,11 @@ namespace Labyrinth.Test.Services
 
             // Assert
             FormatException exception = Assert.Throws<FormatException>(act);
-            Assert.Equal("Wrong Number of Quaders in a row ''", exception.Message);
+            Assert.Equal("Wrong Number of Quaders in a row(L = 1, R = 1) - ''", exception.Message);
         }
 
         [Fact]
-        public void TestCreateLabyrinth()
+        public void CreateLabyrinthTest()
         {
             // Arrange
             var inputString = "S.\n#.\n##\nE.";
@@ -101,6 +96,7 @@ namespace Labyrinth.Test.Services
         public void CreateAdjacencyListTest(int x, int y, int z)
         {
             // Arrange
+
             IQuader quader = new Quader('S', new QuaderLocation(x, y, z));
 
             var labyrinthService = _serviceProvider.GetService<ILabyrinthService>();

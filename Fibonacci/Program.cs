@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Fibonacci.Factory;
 using Fibonacci.Services;
+using Fibonacci.Services.ServiceFactory;
 using IOServices;
-using Labyrinth;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Fibonacci

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.IO;
-using IOServices;
 using Xunit;
 
-namespace IOServicesTests
+namespace IOServices.Tests
 {
     public class OutputServiceTests
     {
@@ -16,10 +15,26 @@ namespace IOServicesTests
             IOutputService iOutputService = new OutputService();
 
             // Act
-            iOutputService.ConsoleOutputLine("S.\n#.\n##\nE.");
+            iOutputService.ConsoleOutputLine("S.#.##E.");
 
             //Assert
-            Assert.Equal("S.\n#.\n##\nE.\r\n", stringWriter.ToString());
+            Assert.Equal("S.#.##E.\r\n", stringWriter.ToString());
+        }
+
+        [Fact]
+        public void ConsoleOutputTest()
+        {
+            // Arrange
+            var stringWriter = new StringWriter();
+            Console.SetOut(stringWriter);
+            IOutputService iOutputService = new OutputService();
+
+            // Act
+            iOutputService.ConsoleOutput("S.");
+            iOutputService.ConsoleOutput("S.");
+
+            //Assert
+            Assert.Equal("S.S.", stringWriter.ToString());
         }
     }
 }

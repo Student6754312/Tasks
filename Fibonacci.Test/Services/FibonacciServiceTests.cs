@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Fibonacci.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -7,13 +8,12 @@ namespace Fibonacci.Test.Services
 {
     public class FibonacciServiceTests
     {
-        private ServiceProvider _serviceProvider;
-       public FibonacciServiceTests()
+        private IServiceProvider _serviceProvider;
+      
+        public FibonacciServiceTests()
        {
-           _serviceProvider = new ServiceCollection()
-               .AddSingleton<IFibonacciService, FibonacciService>()
-               .BuildServiceProvider();
-        }
+           _serviceProvider = DependencyContainer.GetContainer("appsettings.console.test.json");
+       }
         [Theory]
         [MemberData("GenerateDigit")]
         public void FibTest(int x, long y)

@@ -1,6 +1,6 @@
 ﻿using IOServices;
 
-namespace Fibonacci.Factory
+namespace Fibonacci.Services.ServiceFactory
 {
     public interface IInputSelectionFactory
     {

@@ -1,18 +1,18 @@
 ﻿using System;
+using Fibonacci.Services;
+using Fibonacci.Services.ServiceFactory;
 using IOServices;
-using Labyrinth.Services;
-using Labyrinth.Services.ServiceFactory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Labyrinth
+namespace Fibonacci.Test
 {
     internal static class DependencyContainer
     {
-        internal static IServiceProvider GetContainer()
+        internal static IServiceProvider GetContainer(string appsettingsFileName)
         {
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
+                .AddJsonFile(appsettingsFileName)
                 .Build();
 
             var configSection = configuration.GetSection("ApplicationSettings");
@@ -24,7 +24,7 @@ namespace Labyrinth
                 .AddSingleton<IInputService, InputFromFileService>()
                 .AddSingleton<IOutputService, OutputService>()
                 .Configure<ApplicationSettings>(configSection)
-                .AddTransient<ILabyrinthService, LabyrinthService>()
+                .AddTransient<IFibonacciService, FibonacciService>()
                 .BuildServiceProvider();
         }
 

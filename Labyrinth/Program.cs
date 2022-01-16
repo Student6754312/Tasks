@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Fibonacci;
-using Fibonacci.Factory;
 using IOServices;
 using Labyrinth.Domain;
 using Labyrinth.Services;
+using Labyrinth.Services.ServiceFactory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,7 +18,6 @@ namespace Labyrinth
 
             try
             {
-               
                 //Setup DI
                 var serviceProvider = DependencyContainer.GetContainer();
 
@@ -99,6 +97,5 @@ namespace Labyrinth
                 outputService?.ConsoleOutputLine("\nExit!");
             }
         }
-
     }
 }

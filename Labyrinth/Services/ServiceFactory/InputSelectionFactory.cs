@@ -4,7 +4,7 @@ using System.Linq;
 using IOServices;
 using Microsoft.Extensions.Options;
 
-namespace Fibonacci.Factory
+namespace Labyrinth.Services.ServiceFactory
 {
     public class InputSelectionFactory : IInputSelectionFactory
     {

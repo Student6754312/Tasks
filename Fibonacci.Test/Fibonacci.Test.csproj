@@ -23,4 +23,16 @@
     <ProjectReference Include="..\Fibonacci\Fibonacci.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="appsettings.console.test.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="appsettings.file.test.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="input.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

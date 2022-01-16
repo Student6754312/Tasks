@@ -1,12 +1,11 @@
 ﻿using System;
-using Fibonacci;
-using Fibonacci.Factory;
 using Fibonacci.Services;
+using Fibonacci.Services.ServiceFactory;
 using IOServices;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Labyrinth
+namespace Fibonacci
 {
     internal static class DependencyContainer
     {
