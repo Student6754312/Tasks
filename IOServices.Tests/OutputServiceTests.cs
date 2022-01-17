@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using IOServices.Base;
 using Xunit;
 
 namespace IOServices.Tests
@@ -15,7 +16,7 @@ namespace IOServices.Tests
             IOutputService iOutputService = new OutputToConsoleService();
 
             // Act
-            iOutputService.ConsoleOutputLine("S.#.##E.");
+            iOutputService.Output("S.#.##E.");
 
             //Assert
             Assert.Equal("S.#.##E.\r\n", stringWriter.ToString());
@@ -30,11 +31,11 @@ namespace IOServices.Tests
             IOutputService iOutputService = new OutputToConsoleService();
 
             // Act
-            iOutputService.ConsoleOutput("S.");
-            iOutputService.ConsoleOutput("S.");
+            iOutputService.Output("S.");
+            iOutputService.Output("S.");
 
             //Assert
-            Assert.Equal("S.S.", stringWriter.ToString());
+            Assert.Equal("S.\r\nS.", stringWriter.ToString().Trim());
         }
     }
 }

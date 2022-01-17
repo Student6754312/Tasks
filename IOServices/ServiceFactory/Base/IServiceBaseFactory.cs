@@ -1,4 +1,4 @@
-﻿namespace IOServices
+﻿namespace IOServices.ServiceFactory.Base
 {
     public interface IServiceBaseFactory<TS>
     {

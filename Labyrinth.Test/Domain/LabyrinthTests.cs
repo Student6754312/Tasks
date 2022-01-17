@@ -7,7 +7,6 @@ namespace Labyrinth.Test.Domain
         [Fact]
         public void LabyrinthTest()
         {
-
             // Arrange
             int l = 2;
             int r = 2;

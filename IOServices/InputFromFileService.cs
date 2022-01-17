@@ -1,10 +1,12 @@
-﻿namespace IOServices
+﻿using IOServices.Base;
+
+namespace IOServices
 {
     public class InputFromFileService : InputFromFileBaseService
     {
-        private readonly IOutputService _outputService;
+        private readonly OutputToConsoleService _outputService;
 
-        public InputFromFileService(IOutputService outputService)
+        public InputFromFileService(OutputToConsoleService outputService)
         {
             _outputService = outputService;
         }

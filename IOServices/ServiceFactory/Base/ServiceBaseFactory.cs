@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Options;
 
-namespace IOServices.ServicesFactory.Base
+namespace IOServices.ServiceFactory.Base
 {
     public class ServiceBaseFactory<TS, TA> : IServiceBaseFactory<TS> where TS : class where TA : class
 

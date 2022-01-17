@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using IOServices;
-using IOServices.ServicesFactory;
-using IOServices.ServicesFactory.Base;
+using IOServices.Base;
 using Labyrinth.Domain;
 using Labyrinth.Services;
 using Microsoft.Extensions.DependencyInjection;

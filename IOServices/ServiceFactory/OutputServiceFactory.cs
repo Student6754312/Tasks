@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
-using IOServices.ServicesFactory.Base;
+using IOServices.Base;
+using IOServices.ServiceFactory.Base;
 using Microsoft.Extensions.Options;
 
-namespace IOServices.ServicesFactory
+namespace IOServices.ServiceFactory
 {
-    public class OutputServiceFactory<TA> : ServiceBaseFactory<IOutputService, TA> where TA : class
+    public class OutputServiceFactory<TA> : ServiceBaseFactory<IOutputService, TA>, IOutputServiceFactory where TA : class
     {
         public OutputServiceFactory(IEnumerable<IOutputService> services, IOptions<TA> options)
             : base(services, options)

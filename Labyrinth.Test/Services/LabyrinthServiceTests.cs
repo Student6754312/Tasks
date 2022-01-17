@@ -17,31 +17,29 @@ namespace Labyrinth.Test.Services
         int c = 2;
         
         private IServiceProvider _serviceProvider;
+        private ILabyrinthService _labyrinthService;
 
         public LabyrinthServiceTests()
         {
             _serviceProvider = DependencyContainer.GetContainer("appsettings.console.test.json");
+            _labyrinthService = _serviceProvider.GetRequiredService<ILabyrinthService>();
         }
 
         [Fact]
         public void CreateLabyrinth_ThrowWrongNumberOfQuadersTest()
         {
-            // Arrange
             var inputString = "S\n#.\n##\nE.";
             var stringReader = new StringReader(inputString);
             Console.SetIn(stringReader);
 
-            var labyrinthService = _serviceProvider.GetService<ILabyrinthService>();
-            
             var labyrinthArray = new IQuader[l, r, c];
-            var mockLabyrinth = CreateILabyrinthMock(labyrinthArray);
+            var labyrinthMock = CreateILabyrinthMock(labyrinthArray);
 
             // Act
-            Action act = () => labyrinthService.CreateLabyrinth(mockLabyrinth.Object);
+            Action act = () => _labyrinthService.CreateLabyrinth(labyrinthMock.Object);
 
             // Assert
-            FormatException exception = Assert.Throws<FormatException>(act);
-            Assert.Equal("Wrong Number of Quaders in a row(L = 1, R = 1) - 'S'", exception.Message);
+            Assert.Throws<FormatException>(act);
         }
 
 
@@ -53,17 +51,14 @@ namespace Labyrinth.Test.Services
             var stringReader = new StringReader(inputString);
             Console.SetIn(stringReader);
 
-            var labyrinthService = _serviceProvider.GetService<ILabyrinthService>();
-
             var labyrinthArray = new IQuader[l, r, c];
-            var mockLabyrinth = CreateILabyrinthMock(labyrinthArray);
+            var labyrinthMock = CreateILabyrinthMock(labyrinthArray);
 
             // Act
-            Action act = () => labyrinthService.CreateLabyrinth(mockLabyrinth.Object);
+            Action act = () => _labyrinthService.CreateLabyrinth(labyrinthMock.Object);
 
             // Assert
-            FormatException exception = Assert.Throws<FormatException>(act);
-            Assert.Equal("Wrong Number of Quaders in a row(L = 1, R = 1) - ''", exception.Message);
+           Assert.Throws<FormatException>(act);
         }
 
         [Fact]
@@ -74,13 +69,11 @@ namespace Labyrinth.Test.Services
             var stringReader = new StringReader(inputString);
             Console.SetIn(stringReader);
 
-            var labyrinthService = _serviceProvider.GetService<ILabyrinthService>();
-
             var labyrinthArray = new IQuader[l, r, c];
-            var mockLabyrinth = CreateILabyrinthMock(labyrinthArray);
+            var labyrinthMock = CreateILabyrinthMock(labyrinthArray);
 
             // Act
-            labyrinthService.CreateLabyrinth(mockLabyrinth.Object);
+            _labyrinthService.CreateLabyrinth(labyrinthMock.Object);
 
             //Assert
             Assert.Equal('S', labyrinthArray[0, 0, 0].View);
@@ -96,16 +89,13 @@ namespace Labyrinth.Test.Services
         public void CreateAdjacencyListTest(int x, int y, int z)
         {
             // Arrange
-
             IQuader quader = new Quader('S', new QuaderLocation(x, y, z));
 
-            var labyrinthService = _serviceProvider.GetService<ILabyrinthService>();
-
             var labyrinthArray = CreateLabyrinthArray("S.\n#.\n##\nE.");
-            var mockLabyrinth = CreateILabyrinthMock(labyrinthArray);
+            var labyrinthMock = CreateILabyrinthMock(labyrinthArray);
 
             // Act
-            var adjacencyList = labyrinthService.CreateAdjacencyList(quader, mockLabyrinth.Object);
+            var adjacencyList = _labyrinthService.CreateAdjacencyList(quader, labyrinthMock.Object);
 
             //Assert
             Assert.Equal(3, adjacencyList.Count);
@@ -118,15 +108,18 @@ namespace Labyrinth.Test.Services
         public void BreadthFirstSearchTest()
         {
             // Arrange
-            var labyrinthService = _serviceProvider.GetService<ILabyrinthService>();
             var labyrinthArray = CreateLabyrinthArray("S.\n#.\n##\nE.");
-            var mockLabyrinth = CreateILabyrinthMock(labyrinthArray);
+            var labyrinthMock = CreateILabyrinthMock(labyrinthArray);
 
             // Act
-            var result = labyrinthService.BreadthFirstSearch(mockLabyrinth.Object, out List<IQuader> shortestPathlist);
+            var result = _labyrinthService.BreadthFirstSearch(labyrinthMock.Object, out List<IQuader> shortestPathlist);
 
             //Assert
+            
+            //Success
             Assert.True(result);
+            
+            //Graph
             Assert.Equal(1, labyrinthArray[0, 0, 0].Value);
             Assert.Equal(2, labyrinthArray[0, 0, 1].Value);
             Assert.Equal(3, labyrinthArray[0, 1, 1].Value);
@@ -134,7 +127,10 @@ namespace Labyrinth.Test.Services
             Assert.Equal(-1, labyrinthArray[1, 0, 1].Value);
             Assert.Equal(4, labyrinthArray[1, 1, 1].Value);
             
+            //Number of Quaders
             Assert.Equal( 5, shortestPathlist.Count);
+            
+            //Time
             Assert.Equal(4, shortestPathlist[1].Value);
             
         }
@@ -143,12 +139,11 @@ namespace Labyrinth.Test.Services
         public void BreadthFirstSearch_FalseResultTest()
         {
             // Arrange
-            var labyrinthService = _serviceProvider.GetService<ILabyrinthService>();
             var labyrinthArray = CreateLabyrinthArray("S.\n##\n##\nE.");
-            var mockLabyrinth = CreateILabyrinthMock(labyrinthArray);
+            var labyrinthMock = CreateILabyrinthMock(labyrinthArray);
 
             // Act
-            var result = labyrinthService.BreadthFirstSearch(mockLabyrinth.Object, out List<IQuader>shortestPathlist);
+            var result = _labyrinthService.BreadthFirstSearch(labyrinthMock.Object, out List<IQuader>shortestPathlist);
 
             //Assert
             Assert.False(result);
@@ -156,21 +151,35 @@ namespace Labyrinth.Test.Services
         }
 
         [Fact]
-        public void FindQuaderTest()
+        public void FindQuaderNotFoundTest()
         {
             // Arrange
-            var labyrinthService = _serviceProvider.GetService<ILabyrinthService>();
-
             var labyrinthArray = CreateLabyrinthArray("#.\n#.\n##\nE.");
 
-            var mockLabyrinth = CreateILabyrinthMock(labyrinthArray);
+            var labyrinthMock = CreateILabyrinthMock(labyrinthArray);
 
             // Act
-            var quadr = labyrinthService.FindQuader(QuaderTypes.Start, mockLabyrinth.Object);
+            var quadr = _labyrinthService.FindQuader(QuaderTypes.Start, labyrinthMock.Object);
 
             //Assert
             Assert.Null(quadr);
         }
+
+        [Fact]
+        public void FindQuaderTest()
+        {
+            // Arrange
+            var labyrinthArray = CreateLabyrinthArray("S#.\n#.\n##\nE.");
+
+            var labyrinthMock = CreateILabyrinthMock(labyrinthArray);
+
+            // Act
+            var quadr = _labyrinthService.FindQuader(QuaderTypes.Exit, labyrinthMock.Object);
+
+            //Assert
+            Assert.NotNull(quadr);
+        }
+
 
         [Fact]
         public void PrintLabyrinthTest()
@@ -179,26 +188,24 @@ namespace Labyrinth.Test.Services
             var stringWriter = new StringWriter();
             Console.SetOut(stringWriter);
 
-            var labyrinthService = _serviceProvider.GetService<ILabyrinthService>();
-
             var labyrinthArray = CreateLabyrinthArray("S.\n#.\n##\nE.");
-            var mockLabyrinth = CreateILabyrinthMock(labyrinthArray);
+            var labyrinthMock = CreateILabyrinthMock(labyrinthArray);
 
             // Act
-            labyrinthService.PrintLabyrinth(mockLabyrinth.Object);
+            _labyrinthService.PrintLabyrinth(labyrinthMock.Object);
 
             //Assert
-            Assert.Equal("\r\nS.\r\n#.\r\n\r\n##\r\nE.\r\n", stringWriter.ToString());
+            Assert.Equal("S.\r\n#.\r\n\r\n##\r\nE.", stringWriter.ToString().Trim());
         }
 
         private Mock<ILabyrinth> CreateILabyrinthMock(IQuader[,,] labyrinthArray)
         {
-            var mockLabyrinth = new Mock<ILabyrinth>();
-            mockLabyrinth.Setup(lab => lab.L).Returns(2);
-            mockLabyrinth.Setup(lab => lab.R).Returns(2);
-            mockLabyrinth.Setup(lab => lab.C).Returns(2);
-            mockLabyrinth.Setup(lab => lab.LabyrinthArray).Returns(labyrinthArray);
-            return mockLabyrinth;
+            var labyrinthMock = new Mock<ILabyrinth>();
+            labyrinthMock.Setup(lab => lab.L).Returns(2);
+            labyrinthMock.Setup(lab => lab.R).Returns(2);
+            labyrinthMock.Setup(lab => lab.C).Returns(2);
+            labyrinthMock.Setup(lab => lab.LabyrinthArray).Returns(labyrinthArray);
+            return labyrinthMock;
         }
 
         private IQuader[,,] CreateLabyrinthArray(string quadersString)

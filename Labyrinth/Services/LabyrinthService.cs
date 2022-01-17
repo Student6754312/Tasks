@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
+using System.Text;
 using IOServices;
-using IOServices.ServicesFactory.Base;
+using IOServices.Base;
+using IOServices.ServiceFactory;
 using Labyrinth.Domain;
 
 namespace Labyrinth.Services
@@ -133,15 +136,16 @@ namespace Labyrinth.Services
         {
             for (int i = 0; i < labyrinth.L; i++)
             {
-                _outputService.Output(Environment.NewLine);
+                _outputService.Output("");
 
                 for (int j = 0; j < labyrinth.R; j++)
                 {
+                    StringBuilder row = new StringBuilder();
                     for (int k = 0; k < labyrinth.C; k++)
                     {
-                        _outputService.Output(labyrinth.LabyrinthArray[i, j, k].View.ToString());
+                        row.Append(labyrinth.LabyrinthArray[i, j, k].View);
                     }
-                    _outputService.Output(Environment.NewLine);
+                    _outputService.Output(row.ToString());
                 }
             }
         }

@@ -2,6 +2,7 @@
 using System.IO;
 using Xunit;
 using System.IO.Abstractions.TestingHelpers;
+using IOServices.Base;
 
 namespace IOServices.Tests
 {

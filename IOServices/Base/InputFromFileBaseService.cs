@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
-using System.Reflection;
 
-namespace IOServices
+namespace IOServices.Base
 {
     public class InputFromFileBaseService : IInputService
     {

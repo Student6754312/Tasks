@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Fibonacci.Domain;
-using Fibonacci.Services;
-using IOServices;
-using Labyrinth;
+using IOServices.Base;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Fibonacci
@@ -45,11 +43,6 @@ namespace Fibonacci
             {
                 outputService?.Output("\nExit!");
             }
-        }
-
-        static int GenerateDigit(Random rng)
-        {
-            return (short)rng.Next(5000);
         }
     }
 }

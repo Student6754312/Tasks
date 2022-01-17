@@ -6,10 +6,10 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="LabyrinthTest.cs" />
-    <Compile Remove="Services\OutputStringServiceTests.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="LabyrinthTest.cs" />
+		<Compile Remove="Services\OutputStringServiceTests.cs" />
+	</ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />

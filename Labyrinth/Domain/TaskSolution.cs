@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using IOServices;
+using IOServices.Base;
+using IOServices.ServiceFactory;
 using Labyrinth.Services;
 
 namespace Labyrinth.Domain
 {
     public class TaskSolution : ITaskSolution
     {
-        private IOutputService _outputService;
-        private IInputService _inputService;
-        private ILabyrinthService _labyrinthService;
+        private readonly IOutputService _outputService;
+        private readonly IInputService _inputService;
+        private readonly ILabyrinthService _labyrinthService;
 
         public TaskSolution(IOutputServiceFactory outputServiceFactory, IInputServiceFactory inputServiceFactory,
             ILabyrinthService labyrinthService)
         {
             _labyrinthService = labyrinthService;
-            _inputService = inputServiceFactory.GetService(); ;
+            _inputService = inputServiceFactory.GetService();
             _outputService = outputServiceFactory.GetService();
         }
 
@@ -26,7 +27,7 @@ namespace Labyrinth.Domain
             //Input Labyrinths
             while (true)
             {
-                _outputService!.Output("L R C");
+                _outputService.Output("L R C");
 
                 //Input Parameters
                 string? inputString = _inputService.Input();
@@ -53,13 +54,13 @@ namespace Labyrinth.Domain
                     throw new FormatException("Wrong Labyrinth Parameters");
                 }
 
-                var labyrinth = new Domain.Labyrinth(l, r, c);
+                var labyrinth = new Labyrinth(l, r, c);
 
-                _labyrinthService!.CreateLabyrinth(labyrinth);
+                _labyrinthService.CreateLabyrinth(labyrinth);
 
                 labyrinthList.Add(labyrinth);
 
-                _outputService?.Output(Environment.NewLine);
+                _outputService.Output(Environment.NewLine);
             }
         }
 
@@ -67,6 +68,7 @@ namespace Labyrinth.Domain
         {
             if (labyrinthList.Count == 0)
             {
+                _outputService.Output("Labyrinth List ist Leer");
                 return;
             }
 
@@ -86,7 +88,5 @@ namespace Labyrinth.Domain
                 }
             }
         }
-
-
     }
 }

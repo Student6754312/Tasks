@@ -1,7 +1,7 @@
 ﻿using System;
 using IOServices;
-using IOServices.ServicesFactory;
-using IOServices.ServicesFactory.Base;
+using IOServices.Base;
+using IOServices.ServiceFactory;
 using Labyrinth.Domain;
 using Labyrinth.Services;
 using Microsoft.Extensions.Configuration;
@@ -28,8 +28,9 @@ namespace Labyrinth
                 .AddTransient<IOutputService, OutputToFileService>()
                 .AddTransient<ILabyrinthService, LabyrinthService>()
                 .Configure<ApplicationSettings>(configSection)
-                .AddTransient<IInputServiceFactory, InputServiceFactory>()
-                .AddTransient<IOutputServiceFactory,OutputServiceFactory >()
+                .AddTransient<IInputServiceFactory, InputServiceFactory<ApplicationSettings>>()
+                .AddTransient<IOutputServiceFactory,OutputServiceFactory<ApplicationSettings>>()
+                .AddTransient<OutputToConsoleService>()
                 .BuildServiceProvider();
         }
 

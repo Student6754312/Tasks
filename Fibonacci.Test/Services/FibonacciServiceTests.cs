@@ -12,14 +12,14 @@ namespace Fibonacci.Test.Services
       
         public FibonacciServiceTests()
        {
-           _serviceProvider = DependencyContainer.GetContainer("appsettings.console.test.json");
+           _serviceProvider = DependencyContainer.GetContainer("appsettings.file.test.json");
        }
         [Theory]
         [MemberData("GenerateDigit")]
         public void FibTest(int x, long y)
         {
             // Arrange
-            int c = 5;
+            
             // Act
             var fibonacciService = _serviceProvider.GetService<IFibonacciService>();
             var f = fibonacciService.Fib(x);

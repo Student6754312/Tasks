@@ -1,8 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.IO.Abstractions;
 
-namespace IOServices
+namespace IOServices.Base
 {
     public class OutputToFileBaseService : IOutputService
     {
@@ -19,8 +18,9 @@ namespace IOServices
 
         public string CreateFile(string filePath = "outputfile.txt")
         {
-            using (_fileSystem.File.CreateText(filePath))
+            using (StreamWriter streamWriter = _fileSystem.File.CreateText(filePath))
             {
+                streamWriter.Close();
                 return filePath;
             }
         }

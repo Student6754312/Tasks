@@ -14,7 +14,6 @@ namespace Labyrinth.Test.Domain
         public void QuaderTest(char view, int value)
         {
             // Arrange
-
             var location = new QuaderLocation (0, 0, 1);
 
             // Act
@@ -26,7 +25,7 @@ namespace Labyrinth.Test.Domain
             Assert.Equal( location, quadr.Location);
         }
         [Fact]
-        public void QuaderTest_ThrowIncorrectQuaderSymbol()
+        public void Quader_ThrowIncorrect_QuaderSymbolTest()
         {
             // Arrange
             var location = new QuaderLocation(0, 0, 1);
@@ -35,8 +34,7 @@ namespace Labyrinth.Test.Domain
             Action act = () => new Quader('R', location);
 
             //Assert
-            FormatException exception = Assert.Throws<FormatException>(act);
-            Assert.Equal($"Incorrect Quader Symbol - 'R'", exception.Message);
+            Assert.Throws<FormatException>(act);
         }
     }
 }
