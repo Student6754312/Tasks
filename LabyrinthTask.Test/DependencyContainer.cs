@@ -1,4 +1,5 @@
 ﻿using System;
+using Fibonacci;
 using IOServices;
 using IOServices.Base;
 using IOServices.ServiceFactory;
@@ -7,14 +8,14 @@ using Labyrinth.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Labyrinth
+namespace Labyrinth.Test
 {
     internal static class DependencyContainer
     {
-        internal static IServiceProvider GetContainer()
+        internal static IServiceProvider GetContainer(string appsettingsFileName)
         {
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
+                .AddJsonFile(appsettingsFileName)
                 .Build();
 
             var configSection = configuration.GetSection("ApplicationSettings");
@@ -24,12 +25,12 @@ namespace Labyrinth
                 .AddTransient<ITaskSolution, TaskSolution>()
                 .AddTransient<IInputService, InputFromConsoleService>()
                 .AddTransient<IOutputService, OutputToConsoleService>()
-                .AddSingleton<IInputService, InputFromFileService>()
-                .AddTransient<IOutputService, OutputToFileService>()
+                .AddSingleton<IInputService, InputFromFileService<ApplicationSettings>>()
+                .AddTransient<IOutputService, OutputToFileService<ApplicationSettings>>()
                 .AddTransient<ILabyrinthService, LabyrinthService>()
                 .Configure<ApplicationSettings>(configSection)
                 .AddTransient<IInputServiceFactory, InputServiceFactory<ApplicationSettings>>()
-                .AddTransient<IOutputServiceFactory,OutputServiceFactory<ApplicationSettings>>()
+                .AddTransient<IOutputServiceFactory, OutputServiceFactory<ApplicationSettings>>()
                 .AddTransient<OutputToConsoleService>()
                 .BuildServiceProvider();
         }

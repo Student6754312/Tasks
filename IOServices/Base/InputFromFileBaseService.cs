@@ -1,24 +1,31 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
+using System.Reflection;
+using Microsoft.Extensions.Options;
 
 namespace IOServices.Base
 {
-    public class InputFromFileBaseService : IInputService
+    public abstract class InputFromFileBaseService<TA> : IInputService where TA : class
     {
         private readonly List<string> _fileStringsList;
         private readonly IFileSystem _fileSystem;
+        private readonly TA _applicationSettings;
+        private readonly string _filePath;
+
         private int _index = 0;
 
-        public InputFromFileBaseService() : this(new FileSystem()) { }
-
-        public InputFromFileBaseService(IFileSystem fileSystem)
+        
+        public InputFromFileBaseService(IOptions<TA> options)
         {
-            _fileSystem = fileSystem;
-            _fileStringsList = LoadInputFile();
+            _fileSystem = new FileSystem();
+            _applicationSettings = options.Value;
+            _filePath = GetFilePath(_applicationSettings);
+            _fileStringsList = LoadInputFile(_filePath);
         }
 
-        public List<string> LoadInputFile(string filePath = "input.txt")
+        public List<string> LoadInputFile(string filePath)
         {
             var fileStringsList = new List<string>();
 
@@ -41,11 +48,22 @@ namespace IOServices.Base
 
         public virtual string? Input()
         {
+            if (_fileStringsList.Count == 0)
+            {
+                throw new FormatException($"File {_filePath} is Empty");
+            }
             if (_index >= _fileStringsList.Count)
             {
                 _index = 0;
             }
             return _fileStringsList[_index++];
+        }
+
+        private string GetFilePath(TA appSettings)
+        {
+            Type type = _applicationSettings.GetType();
+            PropertyInfo propertyInfo = type.GetProperty($"InputFilePath");
+            return  propertyInfo.GetValue(_applicationSettings).ToString();
         }
     }
 }

@@ -1,22 +1,25 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.IO.Abstractions;
+using System.Reflection;
+using Microsoft.Extensions.Options;
 
 namespace IOServices.Base
 {
-    public class OutputToFileBaseService : IOutputService
+    public abstract class OutputToFileBaseService<TA> : IOutputService where TA : class
     {
         private readonly IFileSystem _fileSystem;
         private readonly string _filePath;
+        private readonly TA _applicationSettings;
 
-        public OutputToFileBaseService() : this(new FileSystem()) { }
-
-        public OutputToFileBaseService(IFileSystem fileSystem)
+        public OutputToFileBaseService(IOptions<TA> options)
         {
-            _fileSystem = fileSystem;
-            _filePath = CreateFile();
+            _fileSystem = new FileSystem();
+            _applicationSettings = options.Value;
+            _filePath = CreateFile(GetFilePath(_applicationSettings));
         }
 
-        public string CreateFile(string filePath = "outputfile.txt")
+        public string CreateFile(string filePath = "output.txt")
         {
             using (StreamWriter streamWriter = _fileSystem.File.CreateText(filePath))
             {
@@ -32,6 +35,13 @@ namespace IOServices.Base
                 streamWriter.WriteLine(str);
                 streamWriter.Close();
             }
+        }
+
+        private string GetFilePath(TA appSettings)
+        {
+            Type type = _applicationSettings.GetType();
+            PropertyInfo propertyInfo = type.GetProperty($"OutputFilePath");
+            return propertyInfo.GetValue(_applicationSettings).ToString();
         }
     }
 }

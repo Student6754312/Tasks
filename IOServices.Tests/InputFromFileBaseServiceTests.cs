@@ -18,7 +18,7 @@ namespace IOServices.Tests
 
             mockFileSystem.AddFile(@"input.txt", mockInputFile);
 
-            InputFromFileBaseService inputFromFileBaseService = new InputFromFileBaseService(mockFileSystem);
+            InputFromFileBaseService inputFromFileBaseService = new InputFromFileBaseService<>(mockFileSystem);
             IInputService inputService = new InputFromFileBaseService(mockFileSystem);
 
             // Act

@@ -1,12 +1,13 @@
 ﻿using IOServices.Base;
+using Microsoft.Extensions.Options;
 
 namespace IOServices
 {
-    public class InputFromFileService : InputFromFileBaseService
+    public class InputFromFileService<TA> : InputFromFileBaseService<TA> where TA: class 
     {
         private readonly OutputToConsoleService _outputService;
-
-        public InputFromFileService(OutputToConsoleService outputService)
+        
+        public InputFromFileService(OutputToConsoleService outputService, IOptions<TA> options) : base(options)
         {
             _outputService = outputService;
         }

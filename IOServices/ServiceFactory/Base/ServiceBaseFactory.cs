@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace IOServices.ServiceFactory.Base
 {
-    public class ServiceBaseFactory<TS, TA> : IServiceBaseFactory<TS> where TS : class where TA : class
+    public abstract class ServiceBaseFactory<TS, TA> : IServiceBaseFactory<TS> where TS : class where TA : class
 
     {
         private readonly IEnumerable<TS> _services;
@@ -21,25 +21,25 @@ namespace IOServices.ServiceFactory.Base
         public TS GetService()
         {
 
-           Type type = _applicationSettings.GetType();
+            Type type = _applicationSettings.GetType();
             PropertyInfo propertyInfo = type.GetProperty($"DefaultService");
             var value = propertyInfo.GetValue(_applicationSettings).ToString();
 
-            string service = typeof(TS).Name;
-
-            if (service.StartsWith("IInput"))
+            string prefix = "";
+            if (typeof(TS).Name.StartsWith("IInput"))
             {
-                service = "InputFrom";
+                prefix = "InputFrom";
             }
-            else if (service.StartsWith("IOutput"))
+            else if (typeof(TS).Name.StartsWith("IOutput"))
             {
-                service = "OutputTo";
+                prefix = "OutputTo";
             }
+            
 
             return value.ToLower() switch
             {
-                "console" => _services.First(x => x.GetType().ToString().Contains($"{service}ConsoleService")),
-                "file" => _services.First(x => x.GetType().ToString().Contains($"{service}FileService")),
+                "console" => _services.First(x => x.GetType().ToString().Contains($"{prefix}ConsoleService")),
+                "file" => _services.First(x => x.GetType().ToString().Contains($"{prefix}FileService")),
                 _ => throw new ArgumentNullException()
             };
         }

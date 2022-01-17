@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32002.261
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Labyrinth", "Labyrinth\Labyrinth.csproj", "{B11EFD06-3E22-47B5-AD90-2F87ADEA5083}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LabyrinthTask", "LabyrinthTask\LabyrinthTask.csproj", "{B11EFD06-3E22-47B5-AD90-2F87ADEA5083}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Labyrinth.Test", "Labyrinth.Test\Labyrinth.Test.csproj", "{0D9F64FD-4E12-43CE-AEC9-A22193FC2AA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LabyrinthTask.Test", "LabyrinthTask.Test\LabyrinthTask.Test.csproj", "{0D9F64FD-4E12-43CE-AEC9-A22193FC2AA8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fibonacci", "Fibonacci\Fibonacci.csproj", "{70CFC959-31EA-4261-BC0E-DC68EC361754}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FibonacciTask", "FibonacciTask\FibonacciTask.csproj", "{70CFC959-31EA-4261-BC0E-DC68EC361754}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fibonacci.Test", "Fibonacci.Test\Fibonacci.Test.csproj", "{5C738D12-1F59-4B5D-86A3-0976D3D39803}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FibonacciTask.Test", "FibonacciTask.Test\FibonacciTask.Test.csproj", "{5C738D12-1F59-4B5D-86A3-0976D3D39803}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IOServices", "IOServices\IOServices.csproj", "{59D7B204-42E2-4EE9-9909-071E9B235003}"
 EndProject
