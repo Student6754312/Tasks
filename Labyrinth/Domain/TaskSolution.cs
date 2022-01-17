@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using IOServices.Base;
 using IOServices.ServiceFactory;
 using Labyrinth.Services;
@@ -15,15 +16,16 @@ namespace Labyrinth.Domain
         public TaskSolution(IOutputServiceFactory outputServiceFactory, IInputServiceFactory inputServiceFactory,
             ILabyrinthService labyrinthService)
         {
+            _outputService = outputServiceFactory.GetService();
             _labyrinthService = labyrinthService;
             _inputService = inputServiceFactory.GetService();
-            _outputService = outputServiceFactory.GetService();
+
         }
 
-        public void  Input(List<ILabyrinth> labyrinthList)
+        public void Input(List<ILabyrinth> labyrinthList)
         {
             int l, r, c;
-            
+
             //Input Labyrinths
             while (true)
             {
@@ -32,7 +34,7 @@ namespace Labyrinth.Domain
                 //Input Parameters
                 string? inputString = _inputService.Input();
 
-                var parameters = inputString!.Split(' ');
+                var parameters = inputString!.Split(' ').Where(s => s != "").ToArray();
 
                 if (parameters.Length != 3)
                 {
@@ -45,7 +47,7 @@ namespace Labyrinth.Domain
 
                 if (l == 0 && r == 0 && c == 0)
                 {
-                    _outputService.Output(Environment.NewLine);
+                    _outputService.Output("");
                     break;
                 }
 
@@ -60,7 +62,7 @@ namespace Labyrinth.Domain
 
                 labyrinthList.Add(labyrinth);
 
-                _outputService.Output(Environment.NewLine);
+                _outputService.Output("");
             }
         }
 

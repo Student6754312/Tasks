@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using IOServices;
 using IOServices.Base;
+using IOServices.ServiceFactory;
 using Labyrinth.Domain;
-using Labyrinth.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Labyrinth
@@ -14,7 +13,7 @@ namespace Labyrinth
         static void Main(string[] args)
         {
 
-            IOutputService? outputService = null;
+            IOutputService? _outputService = null;
 
             try
             {
@@ -22,6 +21,8 @@ namespace Labyrinth
                 var serviceProvider = DependencyContainer.GetContainer();
                
                 var taskSolution = serviceProvider.GetRequiredService<ITaskSolution>();
+                var outputServiceFeFactory = serviceProvider.GetRequiredService<IOutputServiceFactory>();
+                _outputService = outputServiceFeFactory.GetService();
                 
                 var labyrinthList = new List<ILabyrinth>();
 
@@ -31,19 +32,19 @@ namespace Labyrinth
             }
             catch (FormatException ex)
             {
-                outputService?.Output($"\nInput Error: {ex.Message}");
+                _outputService?.Output($"\nInput Error: {ex.Message}");
             }
             catch (FileNotFoundException ex)
             {
-                outputService?.Output($"\nFile Not Found Error: {ex.Message}");
+                _outputService?.Output($"\nFile Not Found Error: {ex.Message}");
             }
             catch (Exception ex)
             {
-                outputService?.Output($"\nUnexpected Error: {ex.Message}");
+                _outputService?.Output($"\nUnexpected Error: {ex.Message}");
             }
             finally
             {
-                outputService?.Output("\nExit!");
+                _outputService?.Output("\nExit!");
             }
         }
     }

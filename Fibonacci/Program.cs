@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Fibonacci.Domain;
 using IOServices.Base;
+using IOServices.ServiceFactory;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Fibonacci
@@ -11,13 +12,17 @@ namespace Fibonacci
     {
         static void Main(string[] args)
         {
-            IOutputService? outputService = null;
+            IOutputService? _outputService = null;
 
             try
             {
                 //Setup DI
                 var serviceProvider = DependencyContainer.GetContainer();
+
+                var outputServiceFactory = serviceProvider.GetRequiredService<IOutputServiceFactory>();
                 
+                _outputService = outputServiceFactory.GetService();
+
                 var taskSolution = serviceProvider.GetRequiredService<ITaskSolution>();
 
                 var numberList = new List<int>();
@@ -29,19 +34,19 @@ namespace Fibonacci
             }
             catch (FormatException ex)
             {
-                outputService?.Output($"\nInput Error: {ex.Message}");
+                _outputService?.Output($"\nInput Error: {ex.Message}");
             }
             catch (FileNotFoundException ex)
             {
-                outputService?.Output($"\nFile Not Found Error: {ex.Message}");
+                _outputService?.Output($"\nFile Not Found Error: {ex.Message}");
             }
             catch (Exception ex)
             {
-                outputService?.Output($"\nUnexpected Error: {ex.Message}");
+                _outputService?.Output($"\nUnexpected Error: {ex.Message}");
             }
             finally
             {
-                outputService?.Output("\nExit!");
+                _outputService?.Output("\nExit!");
             }
         }
     }
