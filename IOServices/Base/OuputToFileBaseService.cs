@@ -22,10 +22,17 @@ namespace IOServices.Base
 
        private string CreateFile(string filePath = "output.txt")
         {
-            using (StreamWriter streamWriter = _fileSystem.File.CreateText(filePath))
+            try
             {
-                streamWriter.Close();
-                return filePath;
+                using (StreamWriter streamWriter = _fileSystem.File.CreateText(filePath))
+                {
+                    streamWriter.Close();
+                    return filePath;
+                }
+            }
+            catch 
+            {
+                throw new FileNotFoundException("Wrong Output File Path in appsettings.json, Or no permission to write");
             }
         }
 
@@ -42,7 +49,14 @@ namespace IOServices.Base
         {
             Type type = _applicationSettings.GetType();
             PropertyInfo propertyInfo = type.GetProperty($"OutputFilePath");
-            return propertyInfo.GetValue(_applicationSettings).ToString();
+            var value = propertyInfo.GetValue(_applicationSettings).ToString();
+
+            if (String.IsNullOrEmpty(value))
+            {
+                value = "output.file";
+            }
+
+            return value;
         }
     }
 }

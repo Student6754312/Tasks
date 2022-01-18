@@ -17,21 +17,22 @@ namespace FibonacciTask.Domain
             IFibonacciService fibonacciService)
         {
             _fibonacciService = fibonacciService;
-            _inputService = inputServiceFactory.GetService(); 
+            _inputService = inputServiceFactory.GetService();
             _outputService = outputServiceFactory.GetService();
         }
-        
-        public void  Input(List<int> numberList)
+
+        public void Input(List<int> numberList)
         {
             _outputService.Output("Geben Sie, bitte Anzahl von Zahlen ein:");
             int n = Convert.ToInt32(_inputService.Input());
 
             _outputService.Output($"Eingabe {n} Zahl(en):");
+            
+            _outputService.Output("");
 
             for (int i = 0; i < n; i++)
             {
-                _outputService.Output("");
-                
+
                 numberList.Add(Convert.ToInt32(_inputService.Input()));
             }
         }
@@ -47,7 +48,7 @@ namespace FibonacciTask.Domain
 
                 _outputService.Output(
                     $"Die Fibonacci Zahl für {number} ist: {fibStr}");
-                
+
                 _outputService.Output("");
             }
         }

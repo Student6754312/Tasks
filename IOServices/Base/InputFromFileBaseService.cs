@@ -64,7 +64,9 @@ namespace IOServices.Base
         {
             Type type = _applicationSettings.GetType();
             PropertyInfo propertyInfo = type.GetProperty($"InputFilePath");
-            return  propertyInfo.GetValue(_applicationSettings).ToString();
+            var value = propertyInfo.GetValue(_applicationSettings).ToString();
+            
+            return value;
         }
     }
 }

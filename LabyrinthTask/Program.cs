@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using IOServices;
 using IOServices.Interfaces;
 using IOServices.ServiceFactory;
 using LabyrinthTask.Domain;
@@ -32,19 +33,23 @@ namespace LabyrinthTask
             }
             catch (FormatException ex)
             {
-                _outputService?.Output($"\nInput Error: {ex.Message}");
+                _outputService ??= new OutputToConsoleService(); 
+                _outputService.Output($"\nInput Error: {ex.Message}");
             }
             catch (FileNotFoundException ex)
             {
-                _outputService?.Output($"\nFile Not Found Error: {ex.Message}");
+                _outputService ??= new OutputToConsoleService();
+                _outputService.Output($"\nFile Not Found Error: {ex.Message}");
             }
             catch (Exception ex)
             {
-                _outputService?.Output($"\nUnexpected Error: {ex.Message}");
+                _outputService ??= new OutputToConsoleService();
+                _outputService.Output($"\nUnexpected Error: {ex.Message}");
             }
             finally
             {
-                _outputService?.Output("\nExit!");
+                _outputService ??= new OutputToConsoleService();
+                _outputService.Output("\nExit!");
             }
         }
     }
