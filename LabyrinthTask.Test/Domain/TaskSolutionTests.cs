@@ -41,11 +41,11 @@ namespace LabyrinthTask.Test.Domain
         [InlineData("1")]
         [InlineData("1 2")]
         [InlineData("a b")]
-        public void InputWrongInputLabyrinthParametrsTest(string s)
+        public void InputWrongInputLabyrinthParametrsTest(string str)
         {
             // Arrange
             //Setup Input/OutputServicesMocks
-            _inputFromFileServiceMock.Setup(s => s.Input()).Returns(s);
+            _inputFromFileServiceMock.Setup(s => s.Input()).Returns(str);
             _outputToFileServiceMock.Setup(s => s.Output(" "));
 
             var taskSolution = new TaskSolution(_outputServiceFactoryMock.Object, _inputServiceFactoryMock.Object,

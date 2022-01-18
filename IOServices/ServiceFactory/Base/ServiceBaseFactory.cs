@@ -22,7 +22,7 @@ namespace IOServices.ServiceFactory.Base
         {
 
             Type type = _applicationSettings.GetType();
-            PropertyInfo propertyInfo = type.GetProperty($"DefaultService");
+            PropertyInfo propertyInfo = type.GetProperty($"DefaultInputService");
             var value = propertyInfo.GetValue(_applicationSettings).ToString();
 
             string prefix = "";

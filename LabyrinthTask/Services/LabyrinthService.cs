@@ -13,10 +13,10 @@ namespace LabyrinthTask.Services
         private readonly IInputService _inputService;
         private readonly IOutputService _outputService;
 
-        public LabyrinthService(IInputServiceFactory inputSelectionFactory, IOutputService outputService)
+        public LabyrinthService(IInputServiceFactory inputServiceFactory, IOutputServiceFactory outputServiceFactory)
         {
-            _inputService = inputSelectionFactory.GetService();
-            _outputService = outputService;
+            _inputService = inputServiceFactory.GetService();
+            _outputService = outputServiceFactory.GetService();
         }
 
         public void CreateLabyrinth(ILabyrinth labyrinth)

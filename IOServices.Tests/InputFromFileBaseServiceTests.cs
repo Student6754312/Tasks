@@ -4,7 +4,6 @@ using System.IO.Abstractions;
 using Xunit;
 using System.IO.Abstractions.TestingHelpers;
 using IOServices.Base;
-using IOServices.Interfaces;
 using Microsoft.Extensions.Options;
 using Moq;
 
@@ -12,7 +11,7 @@ namespace IOServices.Tests
 {
     public class TestApplicationSettings
     {
-        public string DefaultService { get; set; } = "File";
+        public string DefaultInputService { get; set; } = "File";
         public string InputFilePath { get; set; } = "input.txt";
         public string OutputFilePath { get; set; } = "output.txt";
     }
