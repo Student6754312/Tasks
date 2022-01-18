@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using IOServices.Base;
+using IOServices.Interfaces;
 using IOServices.ServiceFactory.Base;
 using Microsoft.Extensions.Options;
 

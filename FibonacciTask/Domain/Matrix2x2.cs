@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Fibonacci.Domain
+namespace FibonacciTask.Domain
 {
     public class Matrix2x2
     {

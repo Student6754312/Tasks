@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Fibonacci.Services;
-using IOServices.Base;
+using FibonacciTask.Services;
+using IOServices.Interfaces;
 using IOServices.ServiceFactory;
 
-namespace Fibonacci.Domain
+namespace FibonacciTask.Domain
 {
     public class TaskSolution : ITaskSolution
     {

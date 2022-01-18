@@ -1,51 +1,104 @@
 ﻿using System;
 using System.IO;
+using System.IO.Abstractions;
 using Xunit;
 using System.IO.Abstractions.TestingHelpers;
 using IOServices.Base;
+using IOServices.Interfaces;
+using Microsoft.Extensions.Options;
+using Moq;
 
 namespace IOServices.Tests
 {
+    public class TestApplicationSettings
+    {
+        public string DefaultService { get; set; } = "File";
+        public string InputFilePath { get; set; } = "input.txt";
+        public string OutputFilePath { get; set; } = "output.txt";
+    }
+
+    public class TestAbstractClass : InputFromFileBaseService<TestApplicationSettings>
+    {
+        public TestAbstractClass(IFileSystem fileSystem, IOptions<TestApplicationSettings> options) : base(options, fileSystem)
+        {
+        }
+    }
+
     public class InputFromFileBaseServiceTests
     {
+        private readonly MockFileSystem _mockFileSystem;
+        private readonly Mock<IOptions<TestApplicationSettings>> _optionsMock;
+
+        public InputFromFileBaseServiceTests()
+        {
+            //
+            _mockFileSystem = new MockFileSystem();
+            _optionsMock = new Mock<IOptions<TestApplicationSettings>>();
+            _optionsMock.Setup(o => o.Value).Returns(new TestApplicationSettings());
+        }
+
         [Fact]
         public void InputServiceTest()
         {
             // Arrange
-            var mockFileSystem = new MockFileSystem();
-
             var mockInputFile = new MockFileData("line1\nline2\nline3");
-
-            mockFileSystem.AddFile(@"input.txt", mockInputFile);
-
-            InputFromFileBaseService inputFromFileBaseService = new InputFromFileBaseService<>(mockFileSystem);
-            IInputService inputService = new InputFromFileBaseService(mockFileSystem);
+            _mockFileSystem.AddFile(@"input.txt", mockInputFile);
+            var inputService =  new TestAbstractClass(_mockFileSystem, _optionsMock.Object);
 
             // Act
             var str = inputService.Input();
-            
-            var list = inputFromFileBaseService.LoadInputFile();
+            var str1 = inputService.Input();
+            var str2 = inputService.Input();
             
             Assert.Equal("line1", str);
-
-            Assert.Equal("line1", list[0]);
-            Assert.Equal("line2", list[1]);
-            Assert.Equal("line3", list[2]);
-
+            Assert.Equal("line2", str1);
+            Assert.Equal("line3", str2);
         }
+
+        [Fact]
+        public void InputServiceEmptyFileTest()
+        {
+            // Arrange
+            var mockInputFile = new MockFileData("");
+            _mockFileSystem.AddFile(@"input.txt", mockInputFile);
+            
+            var inputService = new TestAbstractClass(_mockFileSystem, _optionsMock.Object);
+
+            // Act
+            Action act = () => inputService.Input();
+
+            //Assert
+            Assert.Throws<FormatException>(act);
+        }
+
+        [Fact]
+        public void InputServiceIfFileEndGoTopTest()
+        {
+            // Arrange
+            var mockInputFile = new MockFileData("line1\n");
+            _mockFileSystem.AddFile(@"input.txt", mockInputFile);
+            
+            var inputService = new TestAbstractClass(_mockFileSystem, _optionsMock.Object);
+
+            // Act
+            var str = inputService.Input();
+            var str1 = inputService.Input();
+            var str2 = inputService.Input();
+
+            Assert.Equal("line1", str);
+            Assert.Equal("line1", str1);
+            Assert.Equal("line1", str2);
+        }
+
 
         [Fact]
         public void InputServiceThrowFileNotFoundTest()
         {
             // Arrange
-            var mockFileSystem = new MockFileSystem();
-
-            var mockInputFile = new MockFileData("line1\nline2\nline3");
-
-            mockFileSystem.AddFile(@"input1.txt", mockInputFile);
-
+            _mockFileSystem.RemoveFile(@"input.txt");
+            
             // Act
-            Action act = () => new InputFromFileBaseService(mockFileSystem);
+            Action act = () => new TestAbstractClass(_mockFileSystem, _optionsMock.Object);
 
             //Assert
             Assert.Throws<FileNotFoundException>(act);

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using IOServices.Base;
+using IOServices.Interfaces;
 using IOServices.ServiceFactory;
-using Labyrinth.Services;
+using LabyrinthTask.Services;
 
-namespace Labyrinth.Domain
+namespace LabyrinthTask.Domain
 {
     public class TaskSolution : ITaskSolution
     {
@@ -70,7 +70,7 @@ namespace Labyrinth.Domain
         {
             if (labyrinthList.Count == 0)
             {
-                _outputService.Output("Labyrinth List ist Leer");
+                _outputService.Output("Labyrinth List ist Leer\n");
                 return;
             }
 

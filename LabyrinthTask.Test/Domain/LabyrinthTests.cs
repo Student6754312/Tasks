@@ -1,6 +1,7 @@
-﻿using Xunit;
+﻿using LabyrinthTask.Domain;
+using Xunit;
 
-namespace Labyrinth.Test.Domain
+namespace LabyrinthTask.Test.Domain
 {
     public class LabyrinthTests
     {
@@ -13,7 +14,7 @@ namespace Labyrinth.Test.Domain
             int c = 2;
 
             // Act
-            var labyrinth = new Labyrinth.Domain.Labyrinth(l, c, r);
+            var labyrinth = new Labyrinth(l, c, r);
 
             //Assert
             Assert.Equal(labyrinth.L, l);

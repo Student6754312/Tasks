@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Fibonacci.Domain;
-using IOServices.Base;
+using FibonacciTask.Domain;
+using IOServices.Interfaces;
 using IOServices.ServiceFactory;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Fibonacci
+namespace FibonacciTask
 {
     class Program
     {

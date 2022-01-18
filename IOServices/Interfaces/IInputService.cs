@@ -1,4 +1,4 @@
-﻿namespace IOServices.Base
+﻿namespace IOServices.Interfaces
 {
     public interface IInputService
     {

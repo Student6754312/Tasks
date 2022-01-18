@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using IOServices.Base;
+using IOServices.Interfaces;
 using IOServices.ServiceFactory;
-using Labyrinth.Domain;
+using LabyrinthTask.Domain;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Labyrinth
+namespace LabyrinthTask
 {
     class Program
     {

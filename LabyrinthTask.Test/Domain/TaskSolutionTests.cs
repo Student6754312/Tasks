@@ -1,126 +1,148 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Labyrinth.Domain;
-using Microsoft.Extensions.DependencyInjection;
+using IOServices.Interfaces;
+using IOServices.ServiceFactory;
+using LabyrinthTask.Domain;
+using LabyrinthTask.Services;
+using Moq;
 using Xunit;
 
-namespace Labyrinth.Test.Domain
+namespace LabyrinthTask.Test.Domain
 {
     public class TaskSolutionTests
     {
-        private readonly ITaskSolution _taskSolution;
+        private Mock<IOutputServiceFactory> _outputServiceFactoryMock;
+        private Mock<IInputServiceFactory> _inputServiceFactoryMock;
+        private Mock<IOutputService> _outputToFileServiceMock;
+        private Mock<IInputService> _inputFromFileServiceMock;
+        private Mock<ILabyrinthService> _labyrinthServiceMock;
 
         public TaskSolutionTests()
         {
-            var serviceProvider = DependencyContainer.GetContainer("appsettings.file.test.json");
-            _taskSolution = serviceProvider.GetRequiredService<ITaskSolution>();
-        }
+           //Create Input/OutputServiceFactoriesMocks
+            _outputServiceFactoryMock = new Mock<IOutputServiceFactory>();
+            _inputServiceFactoryMock = new Mock<IInputServiceFactory>();
 
-        [Fact]
-        public void InputTest()
-        {
-            // Arrange
-            List<ILabyrinth> labyrinthList = new();
+            //Create LabyrinthServiceMock
+            _labyrinthServiceMock = new Mock<ILabyrinthService>();
 
-            // Act
-            _taskSolution.Input(labyrinthList);
+            //Create Input/OutputServicesMocks
+            _outputToFileServiceMock = new Mock<IOutputService>();
+            _inputFromFileServiceMock = new Mock<IInputService>();
 
-            //Assert
-            Assert.Equal(1, labyrinthList.Count);
-            Assert.Equal(2, labyrinthList[0].L);
-            Assert.Equal(2, labyrinthList[0].R);
-            Assert.Equal(2, labyrinthList[0].C);
-            Assert.Equal(8, labyrinthList[0].LabyrinthArray.Length);
-            Assert.Equal('S', labyrinthList[0].LabyrinthArray[0, 0, 0].View);
-            Assert.Equal('.', labyrinthList[0].LabyrinthArray[0, 1, 1].View);
-            Assert.Equal('E', labyrinthList[0].LabyrinthArray[1, 1, 0].View);
-            Assert.Equal('#', labyrinthList[0].LabyrinthArray[1, 0, 0].View);
-
+            //Setup Input/OutputServiceFactoriesMocks
+            _inputServiceFactoryMock.Setup(s => s.GetService()).Returns(_inputFromFileServiceMock.Object);
+            _outputServiceFactoryMock.Setup(s => s.GetService()).Returns(_outputToFileServiceMock.Object);
         }
 
         [Theory]
-        [InlineData("0 0 1")]
-        [InlineData("0 1")]
-        //[InlineData("-01")]
-        public void InputTestWrongLabyrinthParameters(string s)
+        [InlineData("1 0 1")]
+        [InlineData("1")]
+        [InlineData("1 2")]
+        [InlineData("a b")]
+        public void InputWrongInputLabyrinthParametrsTest(string s)
         {
             // Arrange
-            var serviceProvider = DependencyContainer.GetContainer("appsettings.console.test.json");
-            var taskSolution = serviceProvider.GetRequiredService<ITaskSolution>();
+            //Setup Input/OutputServicesMocks
+            _inputFromFileServiceMock.Setup(s => s.Input()).Returns(s);
+            _outputToFileServiceMock.Setup(s => s.Output(" "));
 
-            List<ILabyrinth> labyrinthList = new();
-
-            var stringReader = new StringReader(s);
-            Console.SetIn(stringReader);
-
+            var taskSolution = new TaskSolution(_outputServiceFactoryMock.Object, _inputServiceFactoryMock.Object,
+                            _labyrinthServiceMock.Object);
             // Act
-            Action act = () => taskSolution.Input(labyrinthList);
+            Action act = () => taskSolution.Input(new List<ILabyrinth>());
 
             //Assert
-
             Assert.Throws<FormatException>(act);
-
         }
 
         [Fact]
-        public void OutputTestEntkommen()
+        public void InputExitTest()
         {
             // Arrange
-            var stringWriter = new StringWriter();
-            Console.SetOut(stringWriter);
+            //Setup Input/OutputServicesMocks
+            _inputFromFileServiceMock.Setup(s => s.Input()).Returns("0 0 0");
 
-            var labyrinth = GetLabyrinth2x2x2("S.\n#.\n##\nE.");
-            var labyrinthList = new List<ILabyrinth>();
-            labyrinthList.Add(labyrinth);
-            
+
+            var taskSolution = new TaskSolution(_outputServiceFactoryMock.Object, _inputServiceFactoryMock.Object,
+                            _labyrinthServiceMock.Object);
             // Act
-            _taskSolution.Output(labyrinthList);
+            var exception = Record.Exception(() => taskSolution.Input(new List<ILabyrinth>()));
 
             //Assert
-            Assert.Equal("Ausgabe:\n\r\nEntkommen in 4 Minute(n)!)", stringWriter.ToString().Trim());
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void OutputTestGefangen()
+        public void OutputTestEmptyLabyrinthList()
         {
             // Arrange
-            var stringWriter = new StringWriter();
-            Console.SetOut(stringWriter);
-
-            var labyrinth = GetLabyrinth2x2x2("S.\n##\n##\nE.");
             var labyrinthList = new List<ILabyrinth>();
-            labyrinthList.Add(labyrinth);
-
+            var taskSolution = new TaskSolution(_outputServiceFactoryMock.Object, _inputServiceFactoryMock.Object,
+                            _labyrinthServiceMock.Object);
             // Act
-            _taskSolution.Output(labyrinthList);
+            var exception = Record.Exception(() => taskSolution.Output(labyrinthList));
 
             //Assert
-            Assert.Equal("Ausgabe:\n\r\nGefangen :-(", stringWriter.ToString().Trim());
+            Assert.Null(exception);
         }
 
         [Fact]
-        public void OutputLabyrinthEmptyTest()
+        public void OutputTestEscape()
         {
             // Arrange
-            var stringWriter = new StringWriter();
-            Console.SetOut(stringWriter);
+            var quader1 = new Quader('S', new QuaderLocation(0, 0, 0));
+            quader1.Value = 1;
+
+            List<IQuader> shortestPath = new() { quader1 };
 
             var labyrinthList = new List<ILabyrinth>();
+            labyrinthList.Add(GetLabyrinth2x2x2("S.\n##\n##\nE."));
 
-            // Act
-            _taskSolution.Output(labyrinthList);
+            _labyrinthServiceMock.Setup(s => s.BreadthFirstSearch(It.IsAny<ILabyrinth>(), out shortestPath)).Returns(false);
+
+            var taskSolution = new TaskSolution(_outputServiceFactoryMock.Object, _inputServiceFactoryMock.Object,
+                _labyrinthServiceMock.Object);
+
+            //Act
+            var exception = Record.Exception(() => taskSolution.Output(labyrinthList));
 
             //Assert
-            Assert.Equal("Labyrinth List ist Leer", stringWriter.ToString().Trim());
+            Assert.Null(exception);
+        }
+
+        [Fact]
+        public void OutputTestCaught()
+        {
+            // Arrange
+            var quader1 = new Quader('S', new QuaderLocation(0, 0, 0));
+            quader1.Value = 1;
+            var quader2 = new Quader('.', new QuaderLocation(1, 1, 1));
+            quader2.Value = 4;
+
+            List<IQuader> shortestPath = new() { quader1, quader2 };
+
+            var labyrinthList = new List<ILabyrinth>();
+            labyrinthList.Add(GetLabyrinth2x2x2("S.\n##\n##\nE."));
+
+            _labyrinthServiceMock.Setup(s => s.BreadthFirstSearch(It.IsAny<ILabyrinth>(), out shortestPath)).Returns(true);
+
+            var taskSolution = new TaskSolution(_outputServiceFactoryMock.Object, _inputServiceFactoryMock.Object,
+                _labyrinthServiceMock.Object);
+
+            //Act
+            var exception = Record.Exception(() => taskSolution.Output(labyrinthList));
+
+            //Assert
+            Assert.Null(exception);
         }
 
         private ILabyrinth GetLabyrinth2x2x2(string quadersString)
         {
             var inputString = quadersString.Split('\n').ToList();
-            
-            var labyrinth = new Labyrinth.Domain.Labyrinth(2, 2, 2);
+
+            var labyrinth = new Labyrinth(2, 2, 2);
 
             var x = 0;
             for (int i = 0; i < 2; i++)
@@ -138,6 +160,5 @@ namespace Labyrinth.Test.Domain
 
             return labyrinth;
         }
-
     }
 }

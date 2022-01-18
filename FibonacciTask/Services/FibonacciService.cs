@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
-using Fibonacci.Domain;
+using FibonacciTask.Domain;
 
-namespace Fibonacci.Services
+namespace FibonacciTask.Services
 {
     public class FibonacciService : IFibonacciService
 

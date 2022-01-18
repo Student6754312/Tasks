@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Resources;
 using System.Text;
-using IOServices;
-using IOServices.Base;
+using IOServices.Interfaces;
 using IOServices.ServiceFactory;
-using Labyrinth.Domain;
+using LabyrinthTask.Domain;
 
-namespace Labyrinth.Services
+namespace LabyrinthTask.Services
 {
     public class LabyrinthService : ILabyrinthService
     {

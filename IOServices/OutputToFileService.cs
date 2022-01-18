@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.IO.Abstractions;
 using IOServices.Base;
 using Microsoft.Extensions.Options;
 
@@ -9,7 +8,7 @@ namespace IOServices
     {
         private OutputToConsoleService _outputService;
 
-        public OutputToFileService(OutputToConsoleService outputService, IOptions<TA> options) : base(options)
+        public OutputToFileService(OutputToConsoleService outputService, IOptions<TA> options) : base(options, new FileSystem())
         {
             _outputService = outputService;
         }

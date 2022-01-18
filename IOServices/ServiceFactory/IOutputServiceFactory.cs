@@ -1,4 +1,4 @@
-﻿using IOServices.Base;
+﻿using IOServices.Interfaces;
 using IOServices.ServiceFactory.Base;
 
 namespace IOServices.ServiceFactory

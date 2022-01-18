@@ -1,4 +1,4 @@
-﻿namespace Labyrinth.Domain
+﻿namespace LabyrinthTask.Domain
 {
     public enum QuaderTypes
     {

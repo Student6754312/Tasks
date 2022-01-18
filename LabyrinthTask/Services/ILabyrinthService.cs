@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Labyrinth.Domain;
+using LabyrinthTask.Domain;
 
-namespace Labyrinth.Services
+namespace LabyrinthTask.Services
 {
     public interface ILabyrinthService
     {

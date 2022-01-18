@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Labyrinth.Domain
+namespace LabyrinthTask.Domain
 {
     public interface ITaskSolution
     {

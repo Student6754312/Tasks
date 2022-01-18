@@ -1,4 +1,6 @@
-﻿using IOServices.Base;
+﻿using System.IO.Abstractions;
+using IOServices.Base;
+using IOServices.Interfaces;
 using Microsoft.Extensions.Options;
 
 namespace IOServices
@@ -8,7 +10,7 @@ namespace IOServices
         private readonly OutputToConsoleService _outputService;
         private readonly IOutputService _outputFileService;
 
-        public InputFromFileService(OutputToConsoleService outputService, IOptions<TA> options, IOutputService outputFileService) : base(options)
+        public InputFromFileService(OutputToConsoleService outputService, IOptions<TA> options, IOutputService outputFileService) : base(options, new FileSystem())
         {
             _outputService = outputService;
             _outputFileService = outputFileService;

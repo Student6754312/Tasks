@@ -1,14 +1,13 @@
 ﻿using System;
-using Fibonacci;
 using IOServices;
-using IOServices.Base;
+using IOServices.Interfaces;
 using IOServices.ServiceFactory;
-using Labyrinth.Domain;
-using Labyrinth.Services;
+using LabyrinthTask.Domain;
+using LabyrinthTask.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Labyrinth
+namespace LabyrinthTask
 {
     internal static class DependencyContainer
     {

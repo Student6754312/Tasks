@@ -2,6 +2,7 @@
 using System.IO;
 using System.IO.Abstractions;
 using System.Reflection;
+using IOServices.Interfaces;
 using Microsoft.Extensions.Options;
 
 namespace IOServices.Base
@@ -12,9 +13,9 @@ namespace IOServices.Base
         private readonly string _filePath;
         private readonly TA _applicationSettings;
 
-        public OutputToFileBaseService(IOptions<TA> options)
+        public OutputToFileBaseService(IOptions<TA> options, FileSystem fileSystem)
         {
-            _fileSystem = new FileSystem();
+            _fileSystem = fileSystem;
             _applicationSettings = options.Value;
             _filePath = CreateFile(GetFilePath(_applicationSettings));
         }

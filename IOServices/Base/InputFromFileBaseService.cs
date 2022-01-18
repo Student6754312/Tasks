@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Reflection;
+using IOServices.Interfaces;
 using Microsoft.Extensions.Options;
 
 namespace IOServices.Base
@@ -17,15 +18,15 @@ namespace IOServices.Base
         private int _index = 0;
 
         
-        public InputFromFileBaseService(IOptions<TA> options)
+        public InputFromFileBaseService(IOptions<TA> options, IFileSystem fileSystem)
         {
-            _fileSystem = new FileSystem();
+            _fileSystem = fileSystem;
             _applicationSettings = options.Value;
             _filePath = GetFilePath(_applicationSettings);
             _fileStringsList = LoadInputFile(_filePath);
         }
 
-        public List<string> LoadInputFile(string filePath)
+        private List<string> LoadInputFile(string filePath)
         {
             var fileStringsList = new List<string>();
 

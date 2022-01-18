@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Fibonacci.Domain;
+using FibonacciTask.Domain;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace Fibonacci.Test.Domain
+namespace FibonacciTask.Test.Domain
 {
     public class TaskSolutionTests
     {

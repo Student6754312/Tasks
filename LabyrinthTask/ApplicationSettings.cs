@@ -1,4 +1,4 @@
-﻿namespace Fibonacci
+﻿namespace LabyrinthTask
 {
     public class ApplicationSettings
     {

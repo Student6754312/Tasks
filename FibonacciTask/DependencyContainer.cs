@@ -1,13 +1,13 @@
 ﻿using System;
-using Fibonacci.Domain;
-using Fibonacci.Services;
+using FibonacciTask.Domain;
+using FibonacciTask.Services;
 using IOServices;
-using IOServices.Base;
+using IOServices.Interfaces;
 using IOServices.ServiceFactory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Fibonacci
+namespace FibonacciTask
 {
     internal static class DependencyContainer
     {

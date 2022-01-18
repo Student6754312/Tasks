@@ -1,8 +1,8 @@
 ﻿using System;
-using Labyrinth.Domain;
+using LabyrinthTask.Domain;
 using Xunit;
 
-namespace Labyrinth.Test.Domain
+namespace LabyrinthTask.Test.Domain
 {
     public class QuaderTests
     {

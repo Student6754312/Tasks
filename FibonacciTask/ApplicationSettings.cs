@@ -1,4 +1,4 @@
-﻿namespace Fibonacci
+﻿namespace FibonacciTask
 {
     public class ApplicationSettings
     {

@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Labyrinth.Domain;
-using Labyrinth.Services;
+using LabyrinthTask.Domain;
+using LabyrinthTask.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
 
-namespace Labyrinth.Test.Services
+namespace LabyrinthTask.Test.Services
 {
     public class LabyrinthServiceTests
     {

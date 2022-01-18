@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Fibonacci.Services;
+using FibonacciTask.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace Fibonacci.Test.Services
+namespace FibonacciTask.Test.Services
 {
     public class FibonacciServiceTests
     {
