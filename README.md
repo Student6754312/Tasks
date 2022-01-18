@@ -1,7 +1,7 @@
 ## Tasks
 Zwei Aufgaben (Projekte) LabyrinthTask und FibonacciTask kann man in zwei Modi ausführen.
 
-1. File - Modus der Eingabe aus einer Datei und Ausgabe in eine Datei (die Ausgabe wird auf der Konsole dupliziert)
+1. File - Dateimodus für Dateieingabe und Ausgabe in Datei (Ausgabe wird auf der Konsole dupliziert)
 2. Console - Nur Konsolenmodus.
 3. Einstellungen werden in appsettings.json festgelegt
 
