@@ -16,8 +16,8 @@ namespace LabyrinthTask.Test.Services
         int r = 2;
         int c = 2;
         
-        private IServiceProvider _serviceProvider;
-        private ILabyrinthService _labyrinthService;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly ILabyrinthService _labyrinthService;
 
         public LabyrinthServiceTests()
         {

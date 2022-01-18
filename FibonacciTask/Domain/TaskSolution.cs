@@ -32,8 +32,8 @@ namespace FibonacciTask.Domain
 
             for (int i = 0; i < n; i++)
             {
-
                 numberList.Add(Convert.ToInt32(_inputService.Input()));
+                _outputService.Output("");
             }
         }
 

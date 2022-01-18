@@ -30,7 +30,6 @@ namespace IOServices.Tests
 
         public InputFromFileBaseServiceTests()
         {
-            //
             _mockFileSystem = new MockFileSystem();
             _optionsMock = new Mock<IOptions<TestApplicationSettings>>();
             _optionsMock.Setup(o => o.Value).Returns(new TestApplicationSettings());

@@ -23,6 +23,7 @@ namespace LabyrinthTask
                
                 var outputServiceFeFactory = serviceProvider.GetRequiredService<IOutputServiceFactory>();
                 _outputService = outputServiceFeFactory.GetService();
+                
                 var taskSolution = serviceProvider.GetRequiredService<ITaskSolution>();
                 
                 var labyrinthList = new List<ILabyrinth>();

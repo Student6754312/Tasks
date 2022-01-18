@@ -6,8 +6,7 @@ namespace IOServices
 {
     public class OutputToFileService<TA> : OutputToFileBaseService<TA> where TA : class
     {
-        private OutputToConsoleService _outputService;
-
+        private readonly OutputToConsoleService _outputService;
         public OutputToFileService(OutputToConsoleService outputService, IOptions<TA> options) : base(options, new FileSystem())
         {
             _outputService = outputService;
