@@ -20,7 +20,7 @@ namespace IOServices.Base
             _filePath = CreateFile(GetFilePath(_applicationSettings));
         }
 
-        public string CreateFile(string filePath = "output.txt")
+       private string CreateFile(string filePath = "output.txt")
         {
             using (StreamWriter streamWriter = _fileSystem.File.CreateText(filePath))
             {

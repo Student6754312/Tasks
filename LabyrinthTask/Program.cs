@@ -20,9 +20,9 @@ namespace LabyrinthTask
                 //Setup DI
                 var serviceProvider = DependencyContainer.GetContainer();
                
-                var taskSolution = serviceProvider.GetRequiredService<ITaskSolution>();
                 var outputServiceFeFactory = serviceProvider.GetRequiredService<IOutputServiceFactory>();
                 _outputService = outputServiceFeFactory.GetService();
+                var taskSolution = serviceProvider.GetRequiredService<ITaskSolution>();
                 
                 var labyrinthList = new List<ILabyrinth>();
 
