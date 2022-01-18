@@ -1,5 +1,5 @@
 ## Tasks
-Zwei Aufgaben (Projekte) LabyrinthTask und FibonacciTask arbeiten in zwei Modi.
+Zwei Aufgaben (Projekte) LabyrinthTask und FibonacciTask kann man in zwei Modi ausführen.
 
 1. File - Modus der Eingabe aus einer Datei und Ausgabe in eine Datei (die Ausgabe wird auf der Konsole dupliziert)
 2. Console - Nur Konsolenmodus.
