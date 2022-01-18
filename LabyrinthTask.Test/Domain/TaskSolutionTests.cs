@@ -12,11 +12,11 @@ namespace LabyrinthTask.Test.Domain
 {
     public class TaskSolutionTests
     {
-        private Mock<IOutputServiceFactory> _outputServiceFactoryMock;
-        private Mock<IInputServiceFactory> _inputServiceFactoryMock;
-        private Mock<IOutputService> _outputToFileServiceMock;
-        private Mock<IInputService> _inputFromFileServiceMock;
-        private Mock<ILabyrinthService> _labyrinthServiceMock;
+        private readonly Mock<IOutputServiceFactory> _outputServiceFactoryMock;
+        private readonly Mock<IInputServiceFactory> _inputServiceFactoryMock;
+        private readonly Mock<IOutputService> _outputToFileServiceMock;
+        private readonly Mock<IInputService> _inputFromFileServiceMock;
+        private readonly Mock<ILabyrinthService> _labyrinthServiceMock;
 
         public TaskSolutionTests()
         {

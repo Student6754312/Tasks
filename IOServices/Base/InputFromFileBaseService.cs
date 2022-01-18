@@ -15,8 +15,7 @@ namespace IOServices.Base
         private readonly TA _applicationSettings;
         private readonly string _filePath;
 
-        private int _index = 0;
-
+        private int _index;
         
         public InputFromFileBaseService(IOptions<TA> options, IFileSystem fileSystem)
         {
