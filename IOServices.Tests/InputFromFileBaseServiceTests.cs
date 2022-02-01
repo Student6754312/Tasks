@@ -96,7 +96,8 @@ namespace IOServices.Tests
             _mockFileSystem.RemoveFile(@"input.txt");
             
             // Act
-            Action act = () => new TestAbstractClass(_mockFileSystem, _optionsMock.Object);
+            var inputService = new TestAbstractClass(_mockFileSystem, _optionsMock.Object);
+            Action act = () => inputService.Input();
 
             //Assert
             Assert.Throws<FileNotFoundException>(act);
