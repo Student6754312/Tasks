@@ -25,7 +25,7 @@ namespace LabyrinthTask
                 .AddTransient<IInputService, InputFromConsoleService>()
                 .AddTransient<IOutputService, OutputToConsoleService>()
                 .AddSingleton<IInputService, InputFromFileService<ApplicationSettings >>()
-                .AddTransient<IOutputService, OutputToFileService<ApplicationSettings>>()
+                .AddSingleton<IOutputService, OutputToFileService<ApplicationSettings>>()
                 .AddTransient<ILabyrinthService, LabyrinthService>()
                 .Configure<ApplicationSettings>(configSection)
                 .AddTransient<IInputServiceFactory, InputServiceFactory<ApplicationSettings>>()

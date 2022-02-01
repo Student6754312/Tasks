@@ -10,22 +10,19 @@ namespace IOServices.Base
 {
     public abstract class InputFromFileBaseService<TA> : IInputService where TA : class
     {
-        private readonly List<string> _fileStringsList;
         private readonly IFileSystem _fileSystem;
         private readonly TA _applicationSettings;
-        private readonly string _filePath;
+        private List<string>? _fileStringsList;
 
         private int _index;
         
-        public InputFromFileBaseService(IOptions<TA> options, IFileSystem fileSystem)
+        protected InputFromFileBaseService(IOptions<TA> options, IFileSystem fileSystem)
         {
             _fileSystem = fileSystem;
             _applicationSettings = options.Value;
-            _filePath = GetFilePath(_applicationSettings);
-            _fileStringsList = LoadInputFile(_filePath);
         }
 
-        private List<string> LoadInputFile(string filePath)
+        private List<string> LoadInputFile(string? filePath)
         {
             var fileStringsList = new List<string>();
 
@@ -48,9 +45,11 @@ namespace IOServices.Base
 
         public virtual string? Input()
         {
+            _fileStringsList ??= LoadInputFile(GetFilePath());
+
             if (_fileStringsList.Count == 0)
             {
-                throw new FormatException($"File {_filePath} is Empty");
+                throw new FormatException($"File {GetFilePath()} is Empty");
             }
             if (_index >= _fileStringsList.Count)
             {
@@ -59,11 +58,11 @@ namespace IOServices.Base
             return _fileStringsList[_index++];
         }
 
-        private string GetFilePath(TA appSettings)
+        private string? GetFilePath()
         {
             Type type = _applicationSettings.GetType();
-            PropertyInfo propertyInfo = type.GetProperty($"InputFilePath");
-            var value = propertyInfo.GetValue(_applicationSettings).ToString();
+            PropertyInfo? propertyInfo = type.GetProperty($"InputFilePath");
+            var value = propertyInfo?.GetValue(_applicationSettings)?.ToString();
             
             return value;
         }

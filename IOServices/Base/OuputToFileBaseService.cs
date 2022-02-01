@@ -10,27 +10,24 @@ namespace IOServices.Base
     public abstract class OutputToFileBaseService<TA> : IOutputService where TA : class
     {
         private readonly IFileSystem _fileSystem;
-        private readonly string _filePath;
+        private string? _filePath;
         private readonly TA _applicationSettings;
 
         public OutputToFileBaseService(IOptions<TA> options, FileSystem fileSystem)
         {
             _fileSystem = fileSystem;
             _applicationSettings = options.Value;
-            _filePath = CreateFile(GetFilePath(_applicationSettings));
         }
 
-       private string CreateFile(string filePath = "output.txt")
+        private string? CreateFile(string? filePath)
         {
             try
             {
-                using (StreamWriter streamWriter = _fileSystem.File.CreateText(filePath))
-                {
-                    streamWriter.Close();
-                    return filePath;
-                }
+                using StreamWriter streamWriter = _fileSystem.File.CreateText(filePath);
+                streamWriter.Close();
+                return filePath;
             }
-            catch 
+            catch
             {
                 throw new FileNotFoundException("Wrong Output File Path in appsettings.json, Or no permission to write");
             }
@@ -38,24 +35,19 @@ namespace IOServices.Base
 
         public virtual void Output(string str)
         {
-            using (StreamWriter streamWriter = _fileSystem.File.AppendText(_filePath))
-            {
-                streamWriter.WriteLine(str);
-                streamWriter.Close();
-            }
+            _filePath ??= CreateFile(GetFilePath());
+            using StreamWriter streamWriter = _fileSystem.File.AppendText(_filePath);
+            streamWriter.WriteLine(str);
+            streamWriter.Close();
         }
 
-        private string GetFilePath(TA appSettings)
+        private string? GetFilePath()
         {
             Type type = _applicationSettings.GetType();
-            PropertyInfo propertyInfo = type.GetProperty($"OutputFilePath");
-            var value = propertyInfo.GetValue(_applicationSettings).ToString();
+            PropertyInfo? propertyInfo = type.GetProperty($"OutputFilePath");
 
-            if (String.IsNullOrEmpty(value))
-            {
-                value = "output.file";
-            }
-
+            var value = propertyInfo?.GetValue(_applicationSettings)?.ToString();
+            
             return value;
         }
     }

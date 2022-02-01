@@ -22,9 +22,14 @@ namespace IOServices.ServiceFactory.Base
         {
 
             Type type = _applicationSettings.GetType();
-            PropertyInfo propertyInfo = type.GetProperty($"DefaultInputService");
-            var value = propertyInfo.GetValue(_applicationSettings).ToString();
+            PropertyInfo? propertyInfo = type.GetProperty($"DefaultInputService");
+            var value = propertyInfo?.GetValue(_applicationSettings)?.ToString();
 
+            if (value == null)
+            {
+                throw new FormatException("DefaultInputService in appsettings.json not defined");
+            }
+            
             string prefix = "";
             if (typeof(TS).Name.StartsWith("IInput"))
             {

@@ -25,7 +25,7 @@ namespace FibonacciTask
                 .AddTransient<IInputService, InputFromConsoleService>()
                 .AddTransient<IOutputService, OutputToConsoleService>()
                 .AddSingleton<IInputService, InputFromFileService<ApplicationSettings>>()
-                .AddTransient<IOutputService, OutputToFileService<ApplicationSettings>>()
+                .AddSingleton<IOutputService, OutputToFileService<ApplicationSettings>>()
                 .AddTransient<IFibonacciService, FibonacciService>()
                 .Configure<ApplicationSettings>(configSection)
                 .AddTransient<IInputServiceFactory, InputServiceFactory<ApplicationSettings>>()
