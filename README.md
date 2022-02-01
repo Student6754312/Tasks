@@ -7,3 +7,6 @@
 - Einstellungen werden in appsettings.json festgelegt
 
     ![task](https://user-images.githubusercontent.com/66704895/149899180-341816f4-f9f4-4008-94c4-f7702efd9897.jpg)
+    
+### P.S.
+ - In der Eingabedatei (input.txt) für FibonacciTask ist die erste Zahl die Anzahl aller anderen Zahlen.
