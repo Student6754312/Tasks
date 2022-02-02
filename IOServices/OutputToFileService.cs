@@ -6,16 +6,16 @@ namespace IOServices
 {
     public class OutputToFileService<TA> : OutputToFileBaseService<TA> where TA : class
     {
-        private readonly OutputToConsoleService _outputService;
+        private readonly OutputToConsoleService _outputToConsoleService;
         public OutputToFileService(OutputToConsoleService outputService, IOptions<TA> options) : base(options, new FileSystem())
         {
-            _outputService = outputService;
+            _outputToConsoleService = outputService;
         }
 
         public override void Output(string str)
         {
             base.Output(str);
-            _outputService.Output(str);
+            _outputToConsoleService.Output(str);
         }
     }
 }

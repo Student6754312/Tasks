@@ -7,16 +7,16 @@ namespace IOServices
 {
     public class InputFromFileService<TA> : InputFromFileBaseService<TA> where TA: class 
     {
-        private readonly IOutputService _outputFileService;
-        public InputFromFileService(IOptions<TA> options, IOutputService outputFileService) : base(options, new FileSystem())
+        private readonly IOutputService _outputToFileService;
+        public InputFromFileService(IOptions<TA> options, IOutputService outputToFileService) : base(options, new FileSystem())
         {
-            _outputFileService = outputFileService;
+            _outputToFileService = outputToFileService;
         }
 
         public override string? Input()
         {
             var str = base.Input();
-            _outputFileService.Output($"{str}\n");
+            _outputToFileService.Output($"{str}\n");
             return str;
         }
 
