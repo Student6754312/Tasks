@@ -48,6 +48,7 @@ namespace IOServices.Tests
             var str1 = inputService.Input();
             var str2 = inputService.Input();
             
+            //Assert
             Assert.Equal("line1", str);
             Assert.Equal("line2", str1);
             Assert.Equal("line3", str2);

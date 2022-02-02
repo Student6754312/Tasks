@@ -45,7 +45,7 @@ namespace IOServices.ServiceFactory.Base
             {
                 "console" => _services.First(x => x.GetType().ToString().Contains($"{prefix}ConsoleService")),
                 "file" => _services.First(x => x.GetType().ToString().Contains($"{prefix}FileService")),
-                _ => throw new ArgumentNullException()
+                _ => throw new FormatException("Wrong DefaultInputService in appsettings.json")
             };
         }
     }
