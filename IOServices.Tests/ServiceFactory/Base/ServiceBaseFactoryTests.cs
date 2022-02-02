@@ -45,7 +45,7 @@ namespace IOServices.Tests.ServiceFactory.Base
         public void GetInputServiceFromConsoleTest()
         {
             // Arrange
-            var servicesMock = getInputServicesMock("Console");
+            var servicesMock = GetInputServicesMock("Console");
 
             // Act
             var inputServiceFactory = new TestAbstractClass<IInputService>(servicesMock.Object, _optionsMock.Object);
@@ -61,7 +61,7 @@ namespace IOServices.Tests.ServiceFactory.Base
         {
             // Arrange
 
-            var servicesMock = getInputServicesMock("File");
+            var servicesMock = GetInputServicesMock("File");
 
             // Act
             var inputServiceFactory = new TestAbstractClass<IInputService>(servicesMock.Object, _optionsMock.Object);
@@ -75,7 +75,7 @@ namespace IOServices.Tests.ServiceFactory.Base
         public void GetOutputServiceFromConsoleTest()
         {
             // Arrange
-            var servicesMock = getOutputServicesMock("Console");
+            var servicesMock = GetOutputServicesMock("Console");
 
             // Act
             var inputServiceFactory = new TestAbstractClass<IOutputService>(servicesMock.Object, _optionsMock.Object);
@@ -90,7 +90,7 @@ namespace IOServices.Tests.ServiceFactory.Base
         public void GetOutputServiceFromFileTest()
         {
             // Arrange
-            var servicesMock = getOutputServicesMock("File");
+            var servicesMock = GetOutputServicesMock("File");
 
             // Act
             var outputServiceFactory = new TestAbstractClass<IOutputService>(servicesMock.Object, _optionsMock.Object);
@@ -105,7 +105,7 @@ namespace IOServices.Tests.ServiceFactory.Base
         public void GetOutputServiceFromFileDefaultInputServiceNotDefinedTest()
         {
             // Arrange
-            var servicesMock = getOutputServicesMock(null);
+            var servicesMock = GetOutputServicesMock(null);
 
             // Act
             var outputServiceFactory = new TestAbstractClass<IOutputService>(servicesMock.Object, _optionsMock.Object);
@@ -119,7 +119,7 @@ namespace IOServices.Tests.ServiceFactory.Base
         public void GetOutputServiceFromFileWrongDefaultInputServiceTest()
         {
             // Arrange
-            var servicesMock = getOutputServicesMock("FFile");
+            var servicesMock = GetOutputServicesMock("FFile");
 
             // Act
             var outputServiceFactory = new TestAbstractClass<IOutputService>(servicesMock.Object, _optionsMock.Object);
@@ -129,7 +129,7 @@ namespace IOServices.Tests.ServiceFactory.Base
             Assert.Throws<FormatException>(act);
         }
 
-        private Mock<IEnumerable<IInputService>> getInputServicesMock(string type)
+        private Mock<IEnumerable<IInputService>> GetInputServicesMock(string type)
         {
             _optionsMock.Setup(o => o.Value).Returns(new TestApplicationSettings(type));
             var outputToFileServiceMock =
@@ -150,7 +150,7 @@ namespace IOServices.Tests.ServiceFactory.Base
         }
 
 
-        private Mock<IEnumerable<IOutputService>> getOutputServicesMock(string type)
+        private Mock<IEnumerable<IOutputService>> GetOutputServicesMock(string type)
         {
             _optionsMock.Setup(o => o.Value).Returns(new TestApplicationSettings(type));
             var outputToFileServiceMock =
