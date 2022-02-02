@@ -13,7 +13,7 @@ namespace IOServices.Base
         private string? _filePath;
         private readonly TA _applicationSettings;
 
-        public OutputToFileBaseService(IOptions<TA> options, FileSystem fileSystem)
+        public OutputToFileBaseService(IOptions<TA> options, IFileSystem fileSystem)
         {
             _fileSystem = fileSystem;
             _applicationSettings = options.Value;

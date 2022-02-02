@@ -1,28 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.IO.Abstractions;
-using Xunit;
 using System.IO.Abstractions.TestingHelpers;
 using IOServices.Base;
 using Microsoft.Extensions.Options;
 using Moq;
+using Xunit;
 
-namespace IOServices.Tests
+namespace IOServices.Tests.Base
 {
-    public class TestApplicationSettings
-    {
-        public string DefaultInputService { get; set; } = "File";
-        public string InputFilePath { get; set; } = "input.txt";
-        public string OutputFilePath { get; set; } = "output.txt";
-    }
-
-    public class TestAbstractClass : InputFromFileBaseService<TestApplicationSettings>
-    {
-        public TestAbstractClass(IFileSystem fileSystem, IOptions<TestApplicationSettings> options) : base(options, fileSystem)
-        {
-        }
-    }
-
     public class InputFromFileBaseServiceTests
     {
         private readonly MockFileSystem _mockFileSystem;
@@ -103,6 +89,13 @@ namespace IOServices.Tests
             //Assert
             Assert.Throws<FileNotFoundException>(act);
 
+        }
+
+        private class TestAbstractClass : InputFromFileBaseService<TestApplicationSettings>
+        {
+            public TestAbstractClass(IFileSystem fileSystem, IOptions<TestApplicationSettings> options) : base(options, fileSystem)
+            {
+            }
         }
     }
 }
