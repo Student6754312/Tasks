@@ -7,9 +7,9 @@ namespace IOServices
     public class OutputToFileService<TA> : OutputToFileBaseService<TA> where TA : class
     {
         private readonly OutputToConsoleService _outputToConsoleService;
-        public OutputToFileService(OutputToConsoleService outputService, IOptions<TA> options) : base(options, new FileSystem())
+        public OutputToFileService(IOptions<TA> options, OutputToConsoleService outputToConsoleService) : base(options, new FileSystem())
         {
-            _outputToConsoleService = outputService;
+            _outputToConsoleService = outputToConsoleService;
         }
 
         public override void Output(string str)

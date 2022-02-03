@@ -133,7 +133,7 @@ namespace IOServices.Tests.ServiceFactory.Base
         {
             _optionsMock.Setup(o => o.Value).Returns(new TestApplicationSettings(type));
             var outputToFileServiceMock =
-                new Mock<OutputToFileService<TestApplicationSettings>>(_outputToConsoleServiceMock.Object, _optionsMock.Object);
+                new Mock<OutputToFileService<TestApplicationSettings>>(_optionsMock.Object, _outputToConsoleServiceMock.Object);
             var inputFromFileServiceMock =
                 new Mock<InputFromFileService<TestApplicationSettings>>(_optionsMock.Object, outputToFileServiceMock.Object);
 
@@ -154,7 +154,7 @@ namespace IOServices.Tests.ServiceFactory.Base
         {
             _optionsMock.Setup(o => o.Value).Returns(new TestApplicationSettings(type));
             var outputToFileServiceMock =
-                new Mock<OutputToFileService<TestApplicationSettings>>(_outputToConsoleServiceMock.Object, _optionsMock.Object);
+                new Mock<OutputToFileService<TestApplicationSettings>>(_optionsMock.Object, _outputToConsoleServiceMock.Object);
             var serviceList = new List<IOutputService>
             {
                 _outputToConsoleServiceMock.Object,
