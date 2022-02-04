@@ -6,6 +6,7 @@ using IOServices.Interfaces;
 using IOServices.ServiceFactory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace FibonacciTask
 {
@@ -24,12 +25,14 @@ namespace FibonacciTask
                 .AddTransient<ITaskSolution, TaskSolution>()
                 .AddTransient<IInputService, InputFromConsoleService>()
                 .AddTransient<IOutputService, OutputToConsoleService>()
-                .AddSingleton<IInputService, InputFromFileService<ApplicationSettings>>()
-                .AddSingleton<IOutputService, OutputToFileService<ApplicationSettings>>()
+                .AddSingleton<IInputService, InputFromFileService>()
+                .AddSingleton<IOutputService, OutputToFileService>()
                 .AddTransient<IFibonacciService, FibonacciService>()
                 .Configure<ApplicationSettings>(configSection)
-                .AddTransient<IInputServiceFactory, InputServiceFactory<ApplicationSettings>>()
-                .AddTransient<IOutputServiceFactory,OutputServiceFactory<ApplicationSettings> >()
+                .AddSingleton(srvProvider =>
+                    (IInputOutputSettings) srvProvider.GetService<IOptions<ApplicationSettings>>()!.Value)
+                .AddTransient<IInputServiceFactory, InputServiceFactory>()
+                .AddTransient<IOutputServiceFactory,OutputServiceFactory>()
                 .AddTransient<OutputToConsoleService>()
                 .BuildServiceProvider();
         }

@@ -2,9 +2,9 @@
 
 namespace IOServices.Tests.Base
 {
-    public class TestApplicationSettings : IInputOutputSettings
+    public class InputOutputSettings : IInputOutputSettings
     {
-        public TestApplicationSettings(string defaultInputService = "File", string inputFilePath = "input.txt", string outputFilePath = "output.txt")
+        public InputOutputSettings(string defaultInputService = "File", string inputFilePath = "input.txt", string outputFilePath = "output.txt")
         {
             DefaultInputService = defaultInputService;
             InputFilePath = inputFilePath;

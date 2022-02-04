@@ -3,8 +3,7 @@ using System.IO;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using IOServices.Base;
-using Microsoft.Extensions.Options;
-using Moq;
+using IOServices.Interfaces;
 using Xunit;
 
 namespace IOServices.Tests.Base
@@ -12,22 +11,20 @@ namespace IOServices.Tests.Base
     public class OutputToFileBaseServiceTests
     {
         private readonly MockFileSystem _mockFileSystem;
-        private readonly Mock<IOptions<TestApplicationSettings>> _optionsMock;
-
+        
         public OutputToFileBaseServiceTests()
         {
             _mockFileSystem = new MockFileSystem();
-            _optionsMock = new Mock<IOptions<TestApplicationSettings>>();
         }
 
         [Fact]
         public void OutputServiceWrongOutputFilePathTest()
         {
             // Arrange
-            _optionsMock.Setup(o => o.Value).Returns(new TestApplicationSettings(outputFilePath: @"c\output.txt"));
+            var testAppSettings = new InputOutputSettings(outputFilePath: @"c\output.txt");
 
             // Act
-            var outputService = new TestAbstractClass(_mockFileSystem, _optionsMock.Object);
+            var outputService = new TestAbstractClass(_mockFileSystem, testAppSettings);
             Action act = () => outputService.Output("Bla");
 
             //Assert
@@ -38,19 +35,19 @@ namespace IOServices.Tests.Base
         public void OutputServiceTest()
         {
             // Arrange
-            _optionsMock.Setup(o => o.Value).Returns(new TestApplicationSettings(outputFilePath: @"output.txt"));
+            var testAppSettings = new InputOutputSettings(outputFilePath: @"output.txt");
 
             // Act
-            var outputService = new TestAbstractClass(_mockFileSystem, _optionsMock.Object);
+            var outputService = new TestAbstractClass(_mockFileSystem, testAppSettings);
             outputService.Output("Bla");
 
             //Assert
             Assert.Equal("Bla", _mockFileSystem.GetFile("output.txt").TextContents.Trim());
         }
 
-        private class TestAbstractClass : OutputToFileBaseService<TestApplicationSettings>
+        private class TestAbstractClass : OutputToFileBaseService
         {
-            public TestAbstractClass(IFileSystem fileSystem, IOptions<TestApplicationSettings> options) : base(options, fileSystem)
+            public TestAbstractClass(IFileSystem fileSystem, IInputOutputSettings inputOutputSettings) : base(inputOutputSettings, fileSystem)
             {
             }
         }

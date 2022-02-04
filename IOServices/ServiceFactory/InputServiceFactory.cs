@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using IOServices.Interfaces;
 using IOServices.ServiceFactory.Base;
-using Microsoft.Extensions.Options;
 
 namespace IOServices.ServiceFactory
 {
-    public class InputServiceFactory <TA>: ServiceBaseFactory<IInputService, TA>, IInputServiceFactory where TA: class 
+    public class InputServiceFactory : ServiceBaseFactory<IInputService>, IInputServiceFactory  
     {
-        public InputServiceFactory(IEnumerable<IInputService> services, IOptions<TA> options)
-            : base(services, options)
+        public InputServiceFactory(IEnumerable<IInputService> services, IInputOutputSettings inputOutputSettings)
+            : base(services, inputOutputSettings)
         {
         }
     }

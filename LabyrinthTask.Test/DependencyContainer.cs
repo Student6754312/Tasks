@@ -6,6 +6,7 @@ using LabyrinthTask.Domain;
 using LabyrinthTask.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace LabyrinthTask.Test
 {
@@ -24,12 +25,14 @@ namespace LabyrinthTask.Test
                 .AddTransient<ITaskSolution, TaskSolution>()
                 .AddTransient<IInputService, InputFromConsoleService>()
                 .AddTransient<IOutputService, OutputToConsoleService>()
-                .AddSingleton<IInputService, InputFromFileService<ApplicationSettings>>()
-                .AddTransient<IOutputService, OutputToFileService<ApplicationSettings>>()
+                .AddTransient<IOutputService, OutputToFileService>()
+                .AddSingleton<IInputService, InputFromFileService>()
                 .AddTransient<ILabyrinthService, LabyrinthService>()
                 .Configure<ApplicationSettings>(configSection)
-                .AddTransient<IInputServiceFactory, InputServiceFactory<ApplicationSettings>>()
-                .AddTransient<IOutputServiceFactory, OutputServiceFactory<ApplicationSettings>>()
+                .AddSingleton(srvProvider =>
+                    (IInputOutputSettings)srvProvider.GetService<IOptions<ApplicationSettings>>()!.Value)
+                .AddTransient<IInputServiceFactory, InputServiceFactory>()
+                .AddTransient<IOutputServiceFactory, OutputServiceFactory>()
                 .AddTransient<OutputToConsoleService>()
                 .BuildServiceProvider();
         }

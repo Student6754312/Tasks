@@ -1,13 +1,13 @@
 ﻿using System.IO.Abstractions;
 using IOServices.Base;
-using Microsoft.Extensions.Options;
+using IOServices.Interfaces;
 
 namespace IOServices
 {
-    public class OutputToFileService<TA> : OutputToFileBaseService<TA> where TA : class
+    public class OutputToFileService : OutputToFileBaseService
     {
         private readonly OutputToConsoleService _outputToConsoleService;
-        public OutputToFileService(IOptions<TA> options, OutputToConsoleService outputToConsoleService) : base(options, new FileSystem())
+        public OutputToFileService(IInputOutputSettings inputOutputSettings, OutputToConsoleService outputToConsoleService) : base(inputOutputSettings, new FileSystem())
         {
             _outputToConsoleService = outputToConsoleService;
         }

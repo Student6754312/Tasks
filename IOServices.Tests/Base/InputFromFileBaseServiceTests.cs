@@ -3,8 +3,7 @@ using System.IO;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using IOServices.Base;
-using Microsoft.Extensions.Options;
-using Moq;
+using IOServices.Interfaces;
 using Xunit;
 
 namespace IOServices.Tests.Base
@@ -12,13 +11,10 @@ namespace IOServices.Tests.Base
     public class InputFromFileBaseServiceTests
     {
         private readonly MockFileSystem _mockFileSystem;
-        private readonly Mock<IOptions<TestApplicationSettings>> _optionsMock;
-
+        
         public InputFromFileBaseServiceTests()
         {
             _mockFileSystem = new MockFileSystem();
-            _optionsMock = new Mock<IOptions<TestApplicationSettings>>();
-            _optionsMock.Setup(o => o.Value).Returns(new TestApplicationSettings());
         }
 
         [Fact]
@@ -27,7 +23,7 @@ namespace IOServices.Tests.Base
             // Arrange
             var mockInputFile = new MockFileData("line1\nline2\nline3");
             _mockFileSystem.AddFile(@"input.txt", mockInputFile);
-            var inputService =  new TestAbstractClass(_mockFileSystem, _optionsMock.Object);
+            var inputService =  new TestAbstractClass(_mockFileSystem, new InputOutputSettings());
 
             // Act
             var str = inputService.Input();
@@ -47,7 +43,7 @@ namespace IOServices.Tests.Base
             var mockInputFile = new MockFileData("");
             _mockFileSystem.AddFile(@"input.txt", mockInputFile);
             
-            var inputService = new TestAbstractClass(_mockFileSystem, _optionsMock.Object);
+            var inputService = new TestAbstractClass(_mockFileSystem, new InputOutputSettings());
 
             // Act
             Action act = () => inputService.Input();
@@ -63,7 +59,7 @@ namespace IOServices.Tests.Base
             var mockInputFile = new MockFileData("line1\n");
             _mockFileSystem.AddFile(@"input.txt", mockInputFile);
             
-            var inputService = new TestAbstractClass(_mockFileSystem, _optionsMock.Object);
+            var inputService = new TestAbstractClass(_mockFileSystem, new InputOutputSettings());
 
             // Act
             var str = inputService.Input();
@@ -83,7 +79,7 @@ namespace IOServices.Tests.Base
             _mockFileSystem.RemoveFile(@"input.txt");
             
             // Act
-            var inputService = new TestAbstractClass(_mockFileSystem, _optionsMock.Object);
+            var inputService = new TestAbstractClass(_mockFileSystem, new InputOutputSettings());
             Action act = () => inputService.Input();
 
             //Assert
@@ -91,9 +87,9 @@ namespace IOServices.Tests.Base
 
         }
 
-        private class TestAbstractClass : InputFromFileBaseService<TestApplicationSettings>
+        private class TestAbstractClass : InputFromFileBaseService
         {
-            public TestAbstractClass(IFileSystem fileSystem, IOptions<TestApplicationSettings> options) : base(options, fileSystem)
+            public TestAbstractClass(IFileSystem fileSystem, IInputOutputSettings inputOutputSettings) : base(inputOutputSettings, fileSystem)
             {
             }
         }

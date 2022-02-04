@@ -1,35 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using Microsoft.Extensions.Options;
+using IOServices.Interfaces;
 
 namespace IOServices.ServiceFactory.Base
 {
-    public abstract class ServiceBaseFactory<TS, TA> : IServiceBaseFactory<TS> where TS : class where TA : class
+    public abstract class ServiceBaseFactory<TS> : IServiceBaseFactory<TS> where TS : class
 
     {
         private readonly IEnumerable<TS> _services;
-        private readonly TA _applicationSettings;
+        private readonly IInputOutputSettings _inputOutputSettings;
 
-        protected ServiceBaseFactory(IEnumerable<TS> services, IOptions<TA> options)
+        protected ServiceBaseFactory(IEnumerable<TS> services, IInputOutputSettings inputOutputSettings)
         {
             _services = services;
-            _applicationSettings = options.Value;
+            _inputOutputSettings = inputOutputSettings;
         }
 
         public TS GetService()
         {
 
-            Type type = _applicationSettings.GetType();
-            PropertyInfo? propertyInfo = type.GetProperty($"DefaultInputService");
-            var value = propertyInfo?.GetValue(_applicationSettings)?.ToString();
+            var value = _inputOutputSettings.DefaultInputService;
 
             if (value == null)
             {
                 throw new FormatException("DefaultInputService in appsettings.json not defined");
             }
-            
+
             string prefix = "";
             if (typeof(TS).Name.StartsWith("IInput"))
             {
@@ -39,7 +36,7 @@ namespace IOServices.ServiceFactory.Base
             {
                 prefix = "OutputTo";
             }
-            
+
 
             return value.ToLower() switch
             {

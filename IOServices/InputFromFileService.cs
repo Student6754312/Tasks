@@ -1,16 +1,16 @@
 ﻿using System.IO.Abstractions;
 using IOServices.Base;
 using IOServices.Interfaces;
-using Microsoft.Extensions.Options;
+using IOServices.ServiceFactory;
 
 namespace IOServices
 {
-    public class InputFromFileService<TA> : InputFromFileBaseService<TA> where TA: class 
+    public class InputFromFileService : InputFromFileBaseService
     {
         private readonly IOutputService _outputToFileService;
-        public InputFromFileService(IOptions<TA> options, IOutputService outputToFileService) : base(options, new FileSystem())
+        public InputFromFileService(IInputOutputSettings inputOutputSettings, IOutputServiceFactory outputServiceFactory) : base(inputOutputSettings, new FileSystem())
         {
-            _outputToFileService = outputToFileService;
+            _outputToFileService = outputServiceFactory.GetService();
         }
 
         public override string? Input()

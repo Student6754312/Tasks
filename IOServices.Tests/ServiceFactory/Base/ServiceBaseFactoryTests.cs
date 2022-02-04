@@ -1,42 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using IOServices.Interfaces;
+using IOServices.ServiceFactory;
 using IOServices.ServiceFactory.Base;
-using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
 
 namespace IOServices.Tests.ServiceFactory.Base
 {
 
-    public class TestApplicationSettings
+    public class InputOutputSettings : IInputOutputSettings
     {
-        public TestApplicationSettings(string defaultInputService)
+        public InputOutputSettings(string defaultInputService)
         {
             DefaultInputService = defaultInputService;
         }
 
-        public string DefaultInputService { get; }
+        public string DefaultInputService { get; set; }
         public string InputFilePath { get; set; } = "input.txt";
         public string OutputFilePath { get; set; } = "output.txt";
     }
 
-    public class TestAbstractClass <TS> : ServiceBaseFactory<TS, TestApplicationSettings> where TS: class
+    public class TestAbstractClass <TS> : ServiceBaseFactory<TS> where TS: class
     {
-        public TestAbstractClass(IEnumerable<TS> services, IOptions<TestApplicationSettings> options) : base(services, options)
+        public TestAbstractClass(IEnumerable<TS> services, IInputOutputSettings inputOutputSettings) : base(services, inputOutputSettings)
         {
         }
     }
     public class ServiceBaseFactoryTests
     {
-        private readonly Mock<IOptions<TestApplicationSettings>> _optionsMock;
         private readonly Mock<InputFromConsoleService> _inputFromConsoleServiceMock;
         private readonly Mock<OutputToConsoleService> _outputToConsoleServiceMock;
+        private IInputOutputSettings _inputOutputSettings;
 
         public ServiceBaseFactoryTests()
         {
-            _optionsMock = new Mock<IOptions<TestApplicationSettings>>();
             _inputFromConsoleServiceMock = new Mock<InputFromConsoleService>();
             _outputToConsoleServiceMock = new Mock<OutputToConsoleService>();
         }
@@ -45,10 +43,11 @@ namespace IOServices.Tests.ServiceFactory.Base
         public void GetInputServiceFromConsoleTest()
         {
             // Arrange
-            var servicesMock = GetInputServicesMock("Console");
+            _inputOutputSettings = new InputOutputSettings("Console");
+            var servicesMock = GetInputServicesMock();
 
             // Act
-            var inputServiceFactory = new TestAbstractClass<IInputService>(servicesMock.Object, _optionsMock.Object);
+            var inputServiceFactory = new TestAbstractClass<IInputService>(servicesMock.Object, _inputOutputSettings);
             var service = inputServiceFactory.GetService();
             var isTrue = service.GetType().Name.StartsWith("InputFromConsoleService");
 
@@ -60,11 +59,11 @@ namespace IOServices.Tests.ServiceFactory.Base
         public void GetInputServiceFromFileTest()
         {
             // Arrange
-
-            var servicesMock = GetInputServicesMock("File");
+            _inputOutputSettings = new InputOutputSettings("File");
+            var servicesMock = GetInputServicesMock();
 
             // Act
-            var inputServiceFactory = new TestAbstractClass<IInputService>(servicesMock.Object, _optionsMock.Object);
+            var inputServiceFactory = new TestAbstractClass<IInputService>(servicesMock.Object, _inputOutputSettings);
             var service = inputServiceFactory.GetService();
             var isTrue = service.GetType().Name.StartsWith("InputFromFileService");
 
@@ -75,10 +74,11 @@ namespace IOServices.Tests.ServiceFactory.Base
         public void GetOutputServiceFromConsoleTest()
         {
             // Arrange
-            var servicesMock = GetOutputServicesMock("Console");
+            _inputOutputSettings = new InputOutputSettings("Console");
+            var servicesMock = GetOutputServicesMock();
 
             // Act
-            var inputServiceFactory = new TestAbstractClass<IOutputService>(servicesMock.Object, _optionsMock.Object);
+            var inputServiceFactory = new TestAbstractClass<IOutputService>(servicesMock.Object, _inputOutputSettings);
             var service = inputServiceFactory.GetService();
             var isTrue = service.GetType().Name.StartsWith("OutputToConsoleService");
 
@@ -90,10 +90,11 @@ namespace IOServices.Tests.ServiceFactory.Base
         public void GetOutputServiceFromFileTest()
         {
             // Arrange
-            var servicesMock = GetOutputServicesMock("File");
+            _inputOutputSettings = new InputOutputSettings("File");
+            var servicesMock = GetOutputServicesMock();
 
             // Act
-            var outputServiceFactory = new TestAbstractClass<IOutputService>(servicesMock.Object, _optionsMock.Object);
+            var outputServiceFactory = new TestAbstractClass<IOutputService>(servicesMock.Object, _inputOutputSettings);
             var service = outputServiceFactory.GetService();
             var isTrue = service.GetType().Name.StartsWith("OutputToFileService");
 
@@ -105,10 +106,11 @@ namespace IOServices.Tests.ServiceFactory.Base
         public void GetOutputServiceFromFileDefaultInputServiceNotDefinedTest()
         {
             // Arrange
-            var servicesMock = GetOutputServicesMock(null);
+            _inputOutputSettings = new InputOutputSettings(null);
+            var servicesMock = GetOutputServicesMock();
 
             // Act
-            var outputServiceFactory = new TestAbstractClass<IOutputService>(servicesMock.Object, _optionsMock.Object);
+            var outputServiceFactory = new TestAbstractClass<IOutputService>(servicesMock.Object, _inputOutputSettings);
             Action act = () => outputServiceFactory.GetService();
 
             //Assert
@@ -119,23 +121,24 @@ namespace IOServices.Tests.ServiceFactory.Base
         public void GetOutputServiceFromFileWrongDefaultInputServiceTest()
         {
             // Arrange
-            var servicesMock = GetOutputServicesMock("FFile");
+            _inputOutputSettings = new InputOutputSettings("FFile");
+            var servicesMock = GetOutputServicesMock();
 
             // Act
-            var outputServiceFactory = new TestAbstractClass<IOutputService>(servicesMock.Object, _optionsMock.Object);
+            var outputServiceFactory = new TestAbstractClass<IOutputService>(servicesMock.Object, _inputOutputSettings);
             Action act = () => outputServiceFactory.GetService();
 
             //Assert
             Assert.Throws<FormatException>(act);
         }
 
-        private Mock<IEnumerable<IInputService>> GetInputServicesMock(string type)
+        private Mock<IEnumerable<IInputService>> GetInputServicesMock()
         {
-            _optionsMock.Setup(o => o.Value).Returns(new TestApplicationSettings(type));
-            var outputToFileServiceMock =
-                new Mock<OutputToFileService<TestApplicationSettings>>(_optionsMock.Object, _outputToConsoleServiceMock.Object);
+            var outputServiceFactoryMock =
+                new Mock<OutputServiceFactory>(GetOutputServicesMock().Object, _inputOutputSettings);
+            
             var inputFromFileServiceMock =
-                new Mock<InputFromFileService<TestApplicationSettings>>(_optionsMock.Object, outputToFileServiceMock.Object);
+                new Mock<InputFromFileService>(_inputOutputSettings, outputServiceFactoryMock.Object);
 
             var serviceList = new List<IInputService>
             {
@@ -150,11 +153,12 @@ namespace IOServices.Tests.ServiceFactory.Base
         }
 
 
-        private Mock<IEnumerable<IOutputService>> GetOutputServicesMock(string type)
+        private Mock<IEnumerable<IOutputService>> GetOutputServicesMock()
         {
-            _optionsMock.Setup(o => o.Value).Returns(new TestApplicationSettings(type));
+
             var outputToFileServiceMock =
-                new Mock<OutputToFileService<TestApplicationSettings>>(_optionsMock.Object, _outputToConsoleServiceMock.Object);
+                new Mock<OutputToFileService>(_inputOutputSettings, _outputToConsoleServiceMock.Object);
+            
             var serviceList = new List<IOutputService>
             {
                 _outputToConsoleServiceMock.Object,

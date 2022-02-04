@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using FibonacciTask.Domain;
-using IOServices;
-using IOServices.Interfaces;
-using IOServices.ServiceFactory;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FibonacciTask

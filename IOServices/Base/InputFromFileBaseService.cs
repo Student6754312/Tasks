@@ -2,24 +2,22 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
-using System.Reflection;
 using IOServices.Interfaces;
-using Microsoft.Extensions.Options;
 
 namespace IOServices.Base
 {
-    public abstract class InputFromFileBaseService<TA> : IInputService where TA : class
+    public abstract class InputFromFileBaseService : IInputService 
     {
         private readonly IFileSystem _fileSystem;
-        private readonly TA _applicationSettings;
+        private readonly IInputOutputSettings _inputOutputSettings;
         private List<string>? _fileStringsList;
 
         private int _index;
         
-        protected InputFromFileBaseService(IOptions<TA> options, IFileSystem fileSystem)
+        protected InputFromFileBaseService(IInputOutputSettings inputOutputSettings, IFileSystem fileSystem)
         {
             _fileSystem = fileSystem;
-            _applicationSettings = options.Value;
+            _inputOutputSettings = inputOutputSettings;
         }
 
         private List<string> LoadInputFile(string? filePath)
@@ -45,26 +43,17 @@ namespace IOServices.Base
 
         public virtual string? Input()
         {
-            _fileStringsList ??= LoadInputFile(GetFilePath());
+            _fileStringsList ??= LoadInputFile(_inputOutputSettings.InputFilePath);
 
             if (_fileStringsList.Count == 0)
             {
-                throw new FormatException($"File {GetFilePath()} is Empty");
+                throw new FormatException($"File {_inputOutputSettings.InputFilePath} is Empty");
             }
             if (_index >= _fileStringsList.Count)
             {
                 _index = 0;
             }
             return _fileStringsList[_index++];
-        }
-
-        private string? GetFilePath()
-        {
-            Type type = _applicationSettings.GetType();
-            PropertyInfo? propertyInfo = type.GetProperty($"InputFilePath");
-            var value = propertyInfo?.GetValue(_applicationSettings)?.ToString();
-            
-            return value;
         }
     }
 }
